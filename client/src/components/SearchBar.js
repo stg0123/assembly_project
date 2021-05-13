@@ -18,18 +18,22 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const SearchBar = (prop) => {
+const SearchBar = (props) => {
     const classes = useStyles();
-    const type = prop.type;
-    const showLogo = prop.showLogo;
-    const placeholder = type === 'law' ? "법안명, 법안 키워드, ..." : "의원명...";
+    const type = props.type;
+    const showLogo = props.showLogo;
+    const placeholder = (type.startsWith('law')) ? "법안명, 법안 키워드, ..." : "의원명...";
     const [input, setInput] = useState("");
     const changeInput = (e) => {
         setInput(e.target.value);
-        console.log(e.target.value)
     }
     const onSubmit = () => {
-        console.log(input);
+        if(input.length==0){
+            alert('검색어가 없습니다.')
+            return
+        }
+        props.setTarget(input)
+        if (type=='law') props.history.push('/search')
     }
     const handleKeyDown = (e) => {
         if (e.key === "Enter") {

@@ -5,7 +5,7 @@ import TopThreeList from './TopThreeList';
 const Main = (props) => {
     return (
         <>
-            <SearchBar showLogo type={props.type} />
+            <SearchBar showLogo type={props.type} {...props} />
             {props.type === "law" && <TopThreeList />}
         </>
     );
