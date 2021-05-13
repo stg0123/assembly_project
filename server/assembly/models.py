@@ -22,21 +22,21 @@ class Law(models.Model):
 
 
 class Lawmaker(models.Model):
-    lawmaker_id = models.AutoField(primary_key=True)
-    lawmaker_name = models.CharField(max_length=1000, blank=True, null=True)
-    lawmaker_english_name = models.CharField(max_length=1000, blank=True, null=True)
-    lawmaker_chinese_name = models.CharField(max_length=1000, blank=True, null=True)
-    lawmaker_birthday = models.TextField(blank=True, null=True)
-    lawmaker_party = models.CharField(max_length=1000, blank=True, null=True)
-    lawmaker_location = models.CharField(max_length=1000, blank=True, null=True)
-    lawmaker_reelection = models.CharField(max_length=1000, blank=True, null=True)
-    lawmaker_elected = models.CharField(max_length=1000, blank=True, null=True)
-    lawmaker_sex = models.CharField(max_length=1000, blank=True, null=True)
-    lawmaker_phone = models.CharField(max_length=1000, blank=True, null=True)
-    lawmaker_office = models.CharField(max_length=1000, blank=True, null=True)
-    lawmaker_email = models.CharField(max_length=1000, blank=True, null=True)
-    lawmaker_homepage = models.CharField(max_length=1000, blank=True, null=True)
-    lawmaker_picture = models.TextField(blank=True, null=True)
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=1000, blank=True, null=True)
+    english_name = models.CharField(max_length=1000, blank=True, null=True)
+    chinese_name = models.CharField(max_length=1000, blank=True, null=True)
+    birthday = models.TextField(blank=True, null=True)
+    party = models.CharField(max_length=1000, blank=True, null=True)
+    location = models.CharField(max_length=1000, blank=True, null=True)
+    reelection = models.CharField(max_length=1000, blank=True, null=True)
+    elected = models.CharField(max_length=1000, blank=True, null=True)
+    sex = models.CharField(max_length=1000, blank=True, null=True)
+    phone = models.CharField(max_length=1000, blank=True, null=True)
+    office = models.CharField(max_length=1000, blank=True, null=True)
+    email = models.CharField(max_length=1000, blank=True, null=True)
+    homepage = models.CharField(max_length=1000, blank=True, null=True)
+    picture = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
