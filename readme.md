@@ -24,9 +24,7 @@
 
 ## 📔 DB 구조
 
-
-
-
+<img src="./resources/erd.jpg" style="zoom:;" />
 
 
 
