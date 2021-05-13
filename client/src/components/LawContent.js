@@ -67,6 +67,7 @@ function LawComment(props){
             alert('로그인이 필요합니다.')
             return
         }
+        console.log()
         const res=await axios.post('/like_comment',{
             username:props.user.userID,
             comment_id:id
@@ -338,7 +339,7 @@ function LawContent(props) {
                         {
                             data.likeComment.map((comment)=>{
                                 return (
-                                    <Grid item xs={12}><LawComment side='agree' text={comment.comment} likes={comment.comment_like} id={comment.comment_id} {...{changer,setChanger}} {...props}/></Grid>
+                                    <Grid item xs={12}><LawComment side='agree' text={comment.comment} likes={comment.comment_like} id={comment.id} {...{changer,setChanger}} {...props}/></Grid>
                                 )
                             })
                         }
@@ -349,7 +350,7 @@ function LawContent(props) {
                     {
                             data.dislikeComment.map((comment)=>{
                                 return (
-                                    <Grid item xs={12}><LawComment side='disagree' text={comment.comment} likes={comment.comment_like} id={comment.comment_id} {...{changer,setChanger}} {...props}/></Grid>
+                                    <Grid item xs={12}><LawComment side='disagree' text={comment.comment} likes={comment.comment_like} id={comment.id} {...{changer,setChanger}} {...props}/></Grid>
                                 )
                             })
                         }

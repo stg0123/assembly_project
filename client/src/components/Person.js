@@ -31,37 +31,39 @@ const useStyles = makeStyles((theme) => ({
   morebtn: {
     display: 'flex',
     justifyContent: 'flex-end'
+  },
+  avatar: {
   }
 }));
 
 export default function Person(props) {
   const classes = useStyles();
   const theme = useTheme();
-  const id = "123";
+  const person = props.person;
   const routeToDetail = () => {
-    props.history.push(`/person/detail/${id}`);
-
+    props.history.push(`/person/detail/${person.id}`);
   }
 
   return (
     <Container style={{ width: "60%", paddingTop: 30, paddingBottom: 30 }}>
 
       <Card className={classes.root}>
-        <Avatar alt="Remy Sharp" src="https://www.assembly.go.kr/photo/9770276.jpg" className={classes.large} />
+        <Avatar alt="Remy Sharp" src={person.picture} className={classes.large} />
         <div className={classes.details} >
           <CardContent className={classes.content}>
-            <Typography component="h5" variant="h5">
-              의원 이름(한자)
-          </Typography>
+            <Typography component="h5" variant="h5" className={classes.avatar}>
+              {person.name} ({person.chinese_name})
+            </Typography>
             <Typography variant="subtitle2">
-              영어이름
-          </Typography>
+              {person.english_name}
+            </Typography>
             <Typography variant="subtitle2">
-              <br />지역구
-          </Typography>
+              <br />{person.party}
+              <br />{person.location}
+            </Typography>
             <Typography variant="subtitle1" color="textSecondary">
-              재선,초선등 정보
-          </Typography>
+              {person.elected}
+            </Typography>
           </CardContent>
           <div >
             <CardActions className={classes.morebtn}>

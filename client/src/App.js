@@ -12,6 +12,10 @@ import LawSearch from './components/LawSearch';
 import PersonSearch from './components/PersonSearch';
 import PersonDetail from './components/PersonDetail';
 import LawContent from './components/LawContent'
+import { useEffect } from 'react';
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 const theme = createMuiTheme({
   palette: {
@@ -34,13 +38,28 @@ const useStyles = makeStyles((theme) => ({
 function App(props) {
   const classes = useStyles();
   const [User, setUser] = useState({
-    isLogin: true,
-    userID: 'testtest'
-  })
+    isLogin: false,
+    userID: ''
+  });
   const [Target, setTarget] = useState('테스트')
+
+  useEffect(() => {
+    const username = cookies.get('username');
+    if (username)
+      setUser({ isLogin: true, userID: username });
+    else
+      setUser({ isLogin: false, ...User });
+
+  }, []);
+
+  const setLogin = (data) => {
+    setUser(data);
+    cookies.set('username', data.userID);
+  };
+
   const dataProps = {
     user: User,
-    setUser: setUser,
+    setUser: setLogin,
     Target: Target,
     setTarget: setTarget
   }
@@ -54,7 +73,7 @@ function App(props) {
           <Route path='/' component={(props) => <Header {...props} type='law' {...dataProps} />} />
         </Switch>
         <Switch>
-          <Route path="/person/search" component={(props) => <PersonSearch {...props} {...dataProps} type='person' />} />
+          <Route path="/person/search/:word" component={(props) => <PersonSearch {...props} {...dataProps} type='person' />} />
           <Route path="/person/detail/:id" component={(props) => <PersonDetail {...props} {...dataProps} type='person' />} />
           <Route path="/person" component={(props) => <Main {...props} {...dataProps} type='person' />} />
           <Route path='/signin' component={(props) => <SignIn {...props} {...dataProps} />} />
