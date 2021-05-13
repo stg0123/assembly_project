@@ -36,9 +36,13 @@ const SearchBar = (props) => {
             alert('검색어가 없습니다.')
             return
         }
-        props.setTarget(input)
-        if (type == 'law') props.history.push('/search')
-        else if (type === 'person') props.history.push('/person/search');
+        if (type==='lawInside'&&input!=props.word){
+            props.history.push(`/search/${input}`)
+            props.setList([])
+            props.setPage(1)
+        } else if(type==='law'){
+            props.history.push(`/search/${input}`)
+        }else if (type === 'person') props.history.push('/person/search');
     }
     const handleKeyDown = (e) => {
         if (e.key === "Enter") {
