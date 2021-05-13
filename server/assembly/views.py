@@ -3,6 +3,8 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import AuthUser
 from .serializers import AccountSerializer
 from rest_framework.parsers import JSONParser
+from django.contrib.auth import authenticate
+import datetime
 
 from rest_framework.parsers import JSONParser
 from .models import Law
@@ -21,6 +23,13 @@ class LawViewset(viewsets.ModelViewSet):
     serializer_class = LawSerializer
     pagination_class = LargeResultsSetPagination
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        search = self.request.GET.get('search', '')
+        if search:
+            qs = qs.filter(bill_name__contains=search)
+        return qs
+
 class Top3Viewset(viewsets.ModelViewSet):
     queryset = Law.objects.annotate(like_sum=F('law_like')+F('law_dislike')).order_by('-like_sum')[:3]
     serializer_class = LawSerializer
@@ -29,23 +38,34 @@ class Top3Viewset(viewsets.ModelViewSet):
 @csrf_exempt
 def account_list(request):
     if request.method == 'GET':
-        query_set = AuthUser.objects.all()
+        query_set = Account.objects.all()
         serializer = AccountSerializer(query_set, many=True)
         return JsonResponse(serializer.data, safe=False)
 
     elif request.method == 'POST':
         data = JSONParser().parse(request)
+        data['is_superuser']=0
+        data['is_staff']=0
+        data['is_active']=1
+        data['date_joined']=datetime.datetime.now()
         serializer = AccountSerializer(data=data)
+        temp=dict()
+        #success
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
+            temp["success"]=True
+            temp['message']="accounts success"
+            return JsonResponse(temp, status=200)
+        #error handle
+        temp['success']=False
+        temp['message']=str(serializer.errors['username']).split("'")[1]
+        return JsonResponse(temp, status=400)
 
 
 @csrf_exempt
 def account(request, pk):
 
-    obj = AuthUser.objects.get(pk=pk)
+    obj = Account.objects.get(pk=pk)
 
     if request.method == 'GET':
         serializer = AccountSerializer(obj)
@@ -69,8 +89,10 @@ def login(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
         search_email = data['username']
-        obj = AuthUser.objects.get(email=search_email)
 
-        if data['password'] == obj.password:
-            return HttpResponse(status=200)
-        return HttpResponse(status=400)
+        #user = authenticate(username=search_email, password=data['password'])
+        obj=AuthUser.objects.get(username=search_email)
+        if data['password']==obj.password:
+        #if user:
+            return JsonResponse({"success": True,"message": "login success"},status=200)
+        return JsonResponse({"success": False,"message": "login fail"},status=400)

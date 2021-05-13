@@ -4,7 +4,8 @@ import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-
+import ThumbUpAltOutlinedIcon from '@material-ui/icons/ThumbUpAltOutlined';
+import ThumbDownAltOutlinedIcon from '@material-ui/icons/ThumbDownAltOutlined';
 const useStyles = makeStyles({
     root: {
         minWidth: 300,
@@ -26,12 +27,33 @@ const useStyles = makeStyles({
         backgroundColor: '#4791db'
     },
     barDisagree: {
-        backgroundColor: '#f44336'
+        backgroundColor: '#f44336',
+        textAlign: "end",
     },
     bar: {
-        fontSize: '10px',
-        marginBottom: '10px'
+        marginBottom: '10px',
     },
+    barPercentage: {
+        color: 'white',
+        padding: 5,
+        fontSize: 18,
+        fontWeight: 'bold',
+        display: "flex",
+        alignItems: "center",
+
+    },
+    barPercentageAgree: {
+        justifyContent: "flex-start",
+        '& svg': {
+            marginRight: 4
+        }
+    },
+    barPercentageDisAgree: {
+        justifyContent: "flex-end",
+        '& svg': {
+            marginLeft: 4
+        }
+    }
 });
 
 function LawSearchCard(props) {
@@ -53,8 +75,12 @@ function LawSearchCard(props) {
         <Card className={classes.root} onClick={() => { alert(code) }}>
             <CardContent>
                 <Grid container>
-                    <Grid style={{ width: getAgreePercent() }} className={[classes.barAgree, classes.bar]}>ㅤ</Grid>
-                    <Grid style={{ width: getDisgreePercent() }} className={[classes.barDisagree, classes.bar]}>ㅤ</Grid>
+                    <Grid style={{ width: getAgreePercent() }} className={[classes.barAgree, classes.bar]}>
+                        <Typography className={[classes.barPercentage, classes.barPercentageAgree]}><ThumbUpAltOutlinedIcon /> {getAgreePercent()}</Typography>
+                    </Grid>
+                    <Grid style={{ width: getDisgreePercent() }} className={[classes.barDisagree, classes.bar]}>
+                        <Typography className={[classes.barPercentage, classes.barPercentageDisAgree]}>{getDisgreePercent()} <ThumbDownAltOutlinedIcon /> </Typography>
+                    </Grid>
                 </Grid>
                 <Typography variant="h5" component="h2">
                     {name}
