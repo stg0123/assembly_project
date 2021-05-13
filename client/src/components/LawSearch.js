@@ -4,6 +4,8 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import LawSearchCard from './LawSearchCard';
 
+import SearchBar from './SearchBar'
+
 const useStyles = makeStyles({
     root: {
         minWidth: 300,
@@ -80,6 +82,7 @@ function LawSearch(props) {
     };
     return (
         <Grid container justify='center'>
+            <SearchBar type={'lawInside'} {...props} />
             <Grid container className={classes.grid} alignItems='center' justify='center'>
                 <Typography className={classes.result} variant='h4'>{Target}에 대한 검색 결과입니다.</Typography>
             </Grid>

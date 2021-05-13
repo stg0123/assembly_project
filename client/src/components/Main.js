@@ -7,7 +7,7 @@ import RecentLaw from './RecentLaw';
 const Main = (props) => {
     return (
         <>
-            <SearchBar showLogo type={props.type} />
+            <SearchBar showLogo type={props.type} {...props} />
             {props.type === "law" && <TopThreeList />}
             {props.type === "law" && <RecentLaw />}
         </>
