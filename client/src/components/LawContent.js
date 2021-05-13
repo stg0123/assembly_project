@@ -62,7 +62,7 @@ function LawComment(props){
     return (<Card className={[classes.root,sideClass]}>
     <CardContent>
         <Typography className={classes.title} gutterBottom>
-            {side=='agree'?'찬성':'반대'} 의견
+            <b>{side=='agree'?'찬성':'반대'} 의견</b>
     </Typography>
    <Grid container justify='center'>
        {text}
@@ -128,18 +128,18 @@ function LawContent() {
             <Grid container className={classes.grid} spacing={4}>
                 <Grid item xs={12}>
                     <Grid container justify='center'>
-                        <Typography variant='h3'>ㅁㄴㅇㄹ에 관한 법률 일부개정법률안</Typography>
+                        <Typography variant='h3'><b>ㅁㄴㅇㄹ에 관한 법률 일부개정법률안</b></Typography>
                     </Grid>
                 </Grid>
                 <Grid item xs={12} sm={4}>
                     <Card className={classes.root}>
                         <CardContent>
                             <Typography className={classes.title} >
-                                발의자
+                                <b>발의자</b>
                         </Typography>
                         <Grid container justify='center'><CreateTwoTone className={classes.icon}/></Grid>
                             <Typography variant="h5" className={classes.text}>
-                                ㅇㅇㅇ 의원 외 00인
+                                <b>ㅇㅇㅇ 의원 외 00인</b>
                         </Typography>
                         </CardContent>
                     </Card>
@@ -148,7 +148,7 @@ function LawContent() {
                     <Card className={classes.root}>
                         <CardContent>
                             <Typography className={classes.title} gutterBottom>
-                                법안에 대한 의견 표시
+                                <b>법안에 대한 의견 표시</b>
                         </Typography>
                        <Grid container justify='center'><ThumbsUpDownTwoTone className={classes.icon}/></Grid>
                         </CardContent>
@@ -170,7 +170,7 @@ function LawContent() {
                     <Card className={classes.root}>
                         <CardContent>
                             <Typography className={classes.title} >
-                                현재 상태
+                                <b>현재 상태</b>
                         </Typography>
                         <Grid container justify='center' className={statusToData[status].class}>
                             {
@@ -184,7 +184,7 @@ function LawContent() {
                             }
                         </Grid>
                             <Typography variant="h5" className={[classes.text,statusToData[status].class]}>
-                                {statusToData[status].text}
+                                <b>{statusToData[status].text}</b>
                         </Typography>
                         </CardContent>
                     </Card>
@@ -193,7 +193,7 @@ function LawContent() {
                     <Card className={classes.root}>
                         <CardContent>
                             <Typography className={classes.title} gutterBottom>
-                                법안 정보
+                                <b>법안 정보</b>
                         </Typography>
                             <Typography variant="h5" component="h2">
                             나라의 말이
@@ -284,7 +284,14 @@ function LawContent() {
                 <Grid item xs={12} sm={6}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}><LawComment side='disagree' text='
-                        정말 좋은 법안이네요.
+                        나라의 말이
+                        중국과 달라
+                        한문·한자와 서로 통하지 아니하므로
+                        이런 까닭으로 어리석은 백성이 이르고자 하는 바가 있어도
+                        끝내 제 뜻을 능히 펴지 못하는 사람이 많다.
+                        내가 이를 위해 불쌍히 여겨
+                        새로 스물여덟 글자를 만드니
+                        사람마다 하여금 쉬이 익혀 날마다 씀에 편안케 하고자 할 따름이다.
                         '/></Grid>
                         <Grid item xs={12}><LawComment side='disagree' text='
                         정말 좋은 법안이네요.
