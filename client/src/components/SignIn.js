@@ -12,7 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useState } from 'react';
-
+import axios from 'axios';
 import crypto from 'crypto';
 
 function Copyright() {
@@ -62,35 +62,40 @@ export default function SignIn(props) {
     const changeUserInfo = (e) => {
         setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
     }
-    
-    const doCheck=(data)=>{return {success:true,message:'비밀번호가 일치하지 않습니다.'}}
 
-    const onSubmit = () => {
-        if(!userInfo.ID){
+    const doCheck = async (user) => {
+        console.log(user);
+        let { data } = await axios.post('/api/login', user);
+        console.log(data);
+        return data;
+    }
+
+    const onSubmit = async () => {
+        if (!userInfo.ID) {
             alert('ID가 입력되지 않았습니다.')
             return
         }
-        if(!userInfo.password){
+        if (!userInfo.password) {
             alert('비밀번호가 입력되지 않았습니다.')
             return
         }
-        const {success,message}=doCheck({
-            ID:userInfo.ID,
-            Password:crypto.createHash('sha256').update(userInfo.password).digest('hex')
+        const { success, message } = await doCheck({
+            username: userInfo.ID,
+            password: crypto.createHash('sha256').update(userInfo.password).digest('hex')
         })
-        if(success){
+        if (success) {
             alert('로그인되었습니다.')
             props.setUser({
-                isLogin:true,
-                userID:userInfo.ID
+                isLogin: true,
+                userID: userInfo.ID
             })
             props.history.push('/')
-        } else{
+        } else {
             alert(`로그인에 실패했습니다. ${message}`)
         }
     }
-    const onKeyPress = (e) =>{
-        if(e.key==='Enter'){
+    const onKeyPress = (e) => {
+        if (e.key === 'Enter') {
             onSubmit()
         }
     }
@@ -146,7 +151,7 @@ export default function SignIn(props) {
           </Button>
                     <Grid container justify="flex-end">
                         <Grid item>
-                            <Link onClick={()=>{props.history.push('signup')}} variant="body2">
+                            <Link onClick={() => { props.history.push('signup') }} variant="body2">
                                 처음이신가요? 회원가입하기
               </Link>
                         </Grid>

@@ -4,6 +4,9 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -38,6 +41,7 @@ function Header(props) {
     const classes = useStyles();
     const logout = () => {
         props.setUser({ ...props.user, isLogin: false })
+        cookies.remove("username");
     }
     return (
         <AppBar position="static" elevation={0} className={classes.root}>

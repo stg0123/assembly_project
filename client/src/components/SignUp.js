@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useState } from 'react';
+import axios from 'axios';
 
 import crypto from 'crypto';
 
@@ -63,14 +64,21 @@ export default function SignUp(props) {
         setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
     }
 
-    const doCheck=(data)=>{return {success:true,message:'이미 존재하는 계정입니다.'}}
+    const doCheck = async (user) => {
+        console.log(user);
+        const { data } = await axios.post('/api/accounts',
+            user
+        );
+        console.log(data);
+        return data;
+    }
 
-    const onSubmit = () => {
-        if(!userInfo.ID){
+    const onSubmit = async () => {
+        if (!userInfo.ID) {
             alert('ID가 입력되지 않았습니다.')
             return
         }
-        if(!userInfo.password){
+        if (!userInfo.password) {
             alert('비밀번호가 입력되지 않았습니다.')
             return
         }
@@ -78,19 +86,19 @@ export default function SignUp(props) {
             alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.')
             return
         }
-        const {success,message}=doCheck({
-            ID:userInfo.ID,
-            Password:crypto.createHash('sha256').update(userInfo.password).digest('hex')
+        const { success, message } = await doCheck({
+            username: userInfo.ID,
+            password: crypto.createHash('sha256').update(userInfo.password).digest('hex')
         })
-        if(success){
+        if (success) {
             alert('회원가입에 성공했습니다. 로그인해 주십시오.')
             props.history.push('/signin')
-        } else{
+        } else {
             alert(`회원가입에 실패했습니다. ${message}`)
         }
     }
-    const onKeyPress = (e) =>{
-        if(e.key==='Enter'){
+    const onKeyPress = (e) => {
+        if (e.key === 'Enter') {
             onSubmit()
         }
     }
