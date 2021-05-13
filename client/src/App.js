@@ -7,6 +7,9 @@ import { Route, BrowserRouter, Switch } from 'react-router-dom';
 import Header from './components/Header'
 import { makeStyles } from '@material-ui/core/styles';
 import { useState } from 'react'
+import { Typography } from '@material-ui/core';
+import TopThreeList from './components/TopThreeList';
+import Main from './components/Main';
 
 const theme = createMuiTheme({
   palette: {
@@ -15,8 +18,21 @@ const theme = createMuiTheme({
     },
     secondary: {
       main: '#2F4170'
+    },
+    up: {
+      main: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)'
+    },
+    down: {
+      main: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)'
     }
-  }
+
+  },
+  typography: {
+    fontFamily: [
+      'Jua',
+      'Black Han Sans'
+    ].join(','),
+  },
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -40,9 +56,9 @@ function App(props) {
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>
         <Switch>
-          <Route path='/person' component={(props) => <Header {...props} type='person' {...dataProps} />} />
+          <Route path='/person' component={(props) => <Main {...props} {...dataProps} type="person" />} />} />
           <Route path='/login' component={(props) => <Header {...props} type='login' {...dataProps} />} />
-          <Route path='/' component={(props) => <Header {...props} type='law' {...dataProps} />} />
+          <Route path='/' component={(props) => <Main {...props} {...dataProps} type="law" />} />
         </Switch>
       </BrowserRouter>
     </MuiThemeProvider>
