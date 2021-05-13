@@ -3,11 +3,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import LawSearchCard from './LawSearchCard';
 import axios from 'axios'
+import { Card } from '@material-ui/core';
 
 const useStyles = makeStyles({
     grid: {
         width: '60%'
-    }
+    },
+    more:{
+        margin:'10px'
+    }  
 });
 
 const getData = async () => {
@@ -54,6 +58,12 @@ const RecentLaw = (props) => {
                 {List.map((info) => {
                     return (<LawSearchCard {...props} {...info} />)
                 })}
+                <Grid item xs={12}>
+                <Card className={classes.more}>
+                    더보기
+                </Card>
+                </Grid>
+                
             </Grid>
         </Grid>
     );
