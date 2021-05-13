@@ -7,6 +7,7 @@ import { Route, BrowserRouter, Switch } from 'react-router-dom';
 import Header from './components/Header'
 import { makeStyles } from '@material-ui/core/styles';
 import { useState } from 'react'
+import LawSearch from './components/LawSearch';
 
 const theme = createMuiTheme({
   palette: {
@@ -31,9 +32,12 @@ function App(props) {
     isLogin: true,
     userID: 'test123'
   })
+  const [Target, setTarget] = useState('테스트')
   const dataProps = {
     user: User,
-    setUser: setUser
+    setUser: setUser,
+    Target:Target,
+    setTarget:setTarget
   }
   return (
     <MuiThemeProvider theme={theme}>
@@ -47,6 +51,7 @@ function App(props) {
         <Switch>
           <Route path='/signin' component={(props) => <SignIn {...props} {...dataProps} />} />
           <Route path='/signup' component={(props) => <SignUp {...props} {...dataProps} />} />
+          <Route path='/search' component={(props) => <LawSearch {...props} {...dataProps} />} />
         </Switch>
       </BrowserRouter>
     </MuiThemeProvider>
