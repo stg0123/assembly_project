@@ -11,6 +11,7 @@ import Main from './components/Main';
 import LawSearch from './components/LawSearch';
 import PersonSearch from './components/PersonSearch';
 import PersonDetail from './components/PersonDetail';
+import LawContent from './components/LawContent'
 
 const theme = createMuiTheme({
   palette: {
@@ -59,6 +60,7 @@ function App(props) {
           <Route path='/signin' component={(props) => <SignIn {...props} {...dataProps} />} />
           <Route path='/signup' component={(props) => <SignUp {...props} {...dataProps} />} />
           <Route path='/search' component={(props) => <LawSearch {...props} {...dataProps} />} />
+          <Route path='/content' component={(props) => <LawContent {...props} {...dataProps} />} />
           <Route path="/" component={(props) => <Main {...props} {...dataProps} type='law' />} />
         </Switch>
       </BrowserRouter>
