@@ -79,7 +79,7 @@ function App(props) {
           <Route path='/signin' component={(props) => <SignIn {...props} {...dataProps} />} />
           <Route path='/signup' component={(props) => <SignUp {...props} {...dataProps} />} />
           <Route path='/search/:word' component={(props) => <LawSearch {...props} {...dataProps} />} />
-          <Route path='/content' component={(props) => <LawContent {...props} {...dataProps} />} />
+          <Route path='/content/:lawId' component={(props) => <LawContent {...props} {...dataProps} />} />
           <Route path="/" component={(props) => <Main {...props} {...dataProps} type='law' />} />
         </Switch>
       </BrowserRouter>

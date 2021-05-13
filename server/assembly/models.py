@@ -46,7 +46,7 @@ class Lawmaker(models.Model):
 class LawmakerCareer(models.Model):
     lawmaker_name = models.TextField(blank=True, null=True)
     career_date = models.TextField(blank=True, null=True)
-    lawmaker_career = models.TextField(blank=True, null=True)
+    career = models.TextField(blank=True, null=True)
     lawmaker_th = models.TextField(blank=True, null=True)
 
     class Meta:
@@ -58,7 +58,7 @@ class LawmakerRecord(models.Model):
     lawmaker_name = models.TextField(blank=True, null=True)
     lawmaker_th = models.TextField(blank=True, null=True)
     record_date = models.TextField(blank=True, null=True)
-    lawmaker_record = models.TextField(blank=True, null=True)
+    record = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -93,7 +93,7 @@ class AuthUser(models.Model):
         db_table = 'auth_user'
 
 class Comments(models.Model):
-    comment_id = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     user_id = models.CharField(max_length=1000, blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
     like_dislike = models.TextField(blank=True, null=True)
@@ -108,8 +108,8 @@ class Comments(models.Model):
 
 class CommentsLike(models.Model):
     user_id = models.CharField(primary_key=True, max_length=255)
-    # comment_id = models.IntegerField(blank=True, null=True)
-    comment = models.ForeignKey(Comments, on_delete=models.PROTECT)
+    comment_id = models.IntegerField(blank=True, null=True)
+    # comment = models.ForeignKey(Comments, on_delete=models.PROTECT)
 
     class Meta:
         managed = False

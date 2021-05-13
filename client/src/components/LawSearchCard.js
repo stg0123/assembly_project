@@ -8,7 +8,7 @@ import ThumbUpAltOutlinedIcon from '@material-ui/icons/ThumbUpAltOutlined';
 import ThumbDownAltOutlinedIcon from '@material-ui/icons/ThumbDownAltOutlined';
 const useStyles = makeStyles({
     root: {
-        minWidth: 300,
+        minWidth: "100%",
         margin: '10px',
         cursor: 'pointer'
     },
@@ -53,6 +53,15 @@ const useStyles = makeStyles({
         '& svg': {
             marginLeft: 4
         }
+    },
+    content: {
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        display: "-webkit-box",
+        WebkitLineClamp: 5,
+        WebkitBoxOrient: "vertical",
+        lineHeight: "1.5rem",
+        height: "7.5rem"
     }
 });
 
@@ -63,16 +72,20 @@ function LawSearchCard(props) {
 
     const getAgreePercent = () => {
         if (agree == 0 && disagree == 0) return '50%'
-        return `${parseInt((agree / (agree + disagree)) * 100)}%`
+        return `${Math.round((agree / (agree + disagree)) * 100)}%`
     }
 
     const getDisgreePercent = () => {
         if (agree == 0 && disagree == 0) return '50%'
-        return `${parseInt((disagree / (agree + disagree)) * 100)}%`
+        return `${Math.round((disagree / (agree + disagree)) * 100)}%`
+    }
+
+    const lawClick = () => {
+        props.history.push(`/content/${code}`)
     }
 
     return (
-        <Card className={classes.root} onClick={() => { alert(code) }}>
+        <Card className={classes.root} onClick={lawClick}>
             <CardContent>
                 <Grid container>
                     <Grid style={{ width: getAgreePercent() }} className={[classes.barAgree, classes.bar]}>
@@ -88,7 +101,7 @@ function LawSearchCard(props) {
                 <Typography className={classes.pos} color="textSecondary">
                     {maker} {bull} {date}
                 </Typography>
-                <Typography variant="body2" component="p">
+                <Typography variant="body2" component="p" className={classes.content}>
                     {content}
                 </Typography>
             </CardContent>

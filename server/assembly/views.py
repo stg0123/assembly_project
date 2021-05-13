@@ -1,17 +1,19 @@
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import AuthUser
-from .serializers import AccountSerializer
+from .serializers import AccountSerializer ,LawmakerCarrerSerializer,LawmakerRecodeSerializer
 from rest_framework.parsers import JSONParser
 from django.contrib.auth import authenticate
 import datetime
 
 from rest_framework.parsers import JSONParser
-from .models import Law, Lawmaker, Comments
+from .models import Law, Lawmaker,LawmakerRecord,LawmakerCareer, Comments, LikeLaw, CommentsLike
 from .serializers import LawSerializer, LawmakerSerializer
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets
-from django.db.models import F
+from django.db.models import F, Q
+from django.shortcuts import get_object_or_404
+
 
 class LargeResultsSetPagination(PageNumberPagination):
     page_size = 10
@@ -63,6 +65,68 @@ def law_detail(request, law_id):
 
 
 @csrf_exempt
+def like_law(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        user_id = data['username']
+        like_dislike = data['like_dislike']
+        law_id = data['law_id']
+
+        try:
+            ll = LikeLaw.objects.get(Q(user_id=user_id) & Q(law_id=law_id))
+        except LikeLaw.DoesNotExist:
+            ll = None
+
+        if ll:
+            return JsonResponse({"success": False, "message": "already clicked"}, status=200)
+
+        LikeLaw.objects.create(user_id=user_id, law_id=law_id, like_dislike=like_dislike)
+        law = Law.objects.get(law_id=law_id)
+        if like_dislike == 'like':
+            law.law_like = law.law_like + 1
+        else:
+            law.law_dislike = law.law_dislike + 1
+        law.save()
+
+        return JsonResponse({"success": True,"message": "click success"},status=200)
+
+@csrf_exempt
+def append_comment(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        user_id = data['username']
+        law_id = data['law_id']
+        content = data['content']
+        like_dislike = data['like_dislike']
+
+        Comments.objects.create(user_id=user_id, comment=content, like_dislike=like_dislike, law_id=law_id, comment_like=0)
+
+        return JsonResponse({"success": True, "message": "comment success"},status=200)
+
+@csrf_exempt
+def like_comment(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        user_id = data['username']
+        # law_id = data['law_id']
+        comment_id = data['comment_id']
+
+        try:
+            cl = CommentsLike.objects.get(Q(user_id=user_id) & Q(id=comment_id))
+        except CommentsLike.DoesNotExist:
+            cl = None
+
+        if cl:
+            return JsonResponse({"success": False, "message": "already clicked"}, status=200)
+
+        CommentsLike.objects.create(user_id=user_id, comment_id=comment_id)
+        comment = Comments.objects.get(id=comment_id)
+        comment.comment_like = comment.comment_like + 1
+        comment.save()
+
+        return JsonResponse({"success": True, "message": "like comment success"},status=200)
+
+@csrf_exempt
 def account_list(request):
     if request.method == 'GET':
         query_set = Account.objects.all()
@@ -109,6 +173,27 @@ def account(request, pk):
     elif request.method == 'DELETE':
         obj.delete()
         return HttpResponse(status=204)
+
+@csrf_exempt
+def person_detail(request,id):
+    if request.method == 'GET':
+        result ={}
+        data1 = LawmakerSerializer(Lawmaker.objects.get(id=id))
+        name = data1.data["name"]
+        data2 = LawmakerRecodeSerializer(LawmakerRecord.objects.filter(lawmaker_name=name)[0])
+        data3 = LawmakerCareer.objects.filter(lawmaker_name=name)
+        result[0]=data1.data
+        result[1]=data2.data
+        n=2
+        for d in data3:
+            result[n] = LawmakerCarrerSerializer(d).data
+            n+=1
+    return JsonResponse(result, safe=False, json_dumps_params={'ensure_ascii': False})
+        
+
+        
+    
+
 
 
 @csrf_exempt

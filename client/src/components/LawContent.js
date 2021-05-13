@@ -1,7 +1,10 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import {ThumbDownTwoTone, ThumbUpTwoTone, ThumbsUpDownTwoTone, CreateTwoTone, CheckCircle, Cached,Clear,Description} from '@material-ui/icons'
 import { Grid, Typography, Card, CardContent, CardActions, Button, TextField, Radio,RadioGroup, FormControlLabel } from '@material-ui/core';
+import {useParams} from 'react-router-dom'
+import axios from 'axios'
+
 const useStyles = makeStyles({
     root: {
         //minWidth: 275,
@@ -57,8 +60,22 @@ const useStyles = makeStyles({
 
 function LawComment(props){
     const classes = useStyles();
-    const {text,side}=props
+    const {text,side,likes,id,changer,setChanger}=props
     const sideClass=side=='agree'?classes.commentAgree:classes.commentDisagree
+    const commentLike=async ()=>{
+        if(!props.user.isLogin){
+            alert('로그인이 필요합니다.')
+            return
+        }
+        const res=await axios.post('/like_comment',{
+            username:props.user.userID,
+            comment_id:id
+        })
+        const {success}=res.data
+        //console.log(res.data)
+        if(!success) alert('이미 클릭하셨습니다.')
+        setChanger(!changer)
+    }
     return (<Card className={[classes.root,sideClass]}>
     <CardContent>
         <Typography className={classes.title} gutterBottom>
@@ -71,23 +88,58 @@ function LawComment(props){
     <Grid container justify='center' className={classes.buttonGrid}>
         <Grid item xs={12}>
             <Grid container justify='center'>
-            <Button><ThumbUpTwoTone className={classes.buttonIcon}/>좋아요 999</Button>
+            <Button onClick={commentLike}><ThumbUpTwoTone className={classes.buttonIcon}/>좋아요 {likes}</Button>
             </Grid>
         </Grid>
     </Grid>
 </Card>)
 }
-
-function LawContent() {
+const getData=async (lawId) =>{
+    let {data}=await axios.get(`/law_detail/${lawId}`)
+    return data
+}
+function LawContent(props) {
     const [input, setInput] = useState("");
     const [radio, setRadio] = useState('')
+    const [data, setData] = useState({
+        name:'',
+        maker:'',
+        likes:0,
+        dislikes:0,
+        status:'progress',
+        content:'',
+        pdf:null,
+        likeComment:[],
+        dislikeComment:[]
+    })
+    const [changer,setChanger]=useState(true)
+    const { lawId } = useParams();
+    useEffect(async ()=>{
+        let {detail,like_comments,dislikes_comments} = await getData(lawId)
+        setData({
+            name:detail.bill_name,
+            maker:`${detail.main_lawmaker} ${detail.proposal_kind}` + (detail.sum_lawmaker > 1 ? ` 외 ${detail.sum_lawmaker - 1}인` : ''),
+            likes:detail.law_like,
+            dislikes:detail.law_dislike,
+            status:(detail.law_pass=='y')?'done':'progress',
+            content:detail.law_summary,
+            pdf:detail.law_pdf,
+            likeComment:like_comments,
+            dislikeComment:dislikes_comments
+        })
+    },[lawId,changer])
+
     const handleRadio = (e) =>{
         setRadio(e.target.value)
     }
     const changeInput = (e) => {
         setInput(e.target.value.replace('\n',''));
     }
-    const onSubmit=()=>{
+    const onSubmit=async ()=>{
+        if(!props.user.isLogin){
+            alert('로그인이 필요합니다.')
+            return
+        }
         if(radio===''){
             alert('찬성 또는 반대를 선택해주십시오.')
             return
@@ -97,8 +149,15 @@ function LawContent() {
             return
         }
 
-        console.log(input,radio)
+        const res=await axios.post('/append_comment',{
+            username:props.user.userID,
+            law_id:lawId,
+            content:input,
+            like_dislike:radio
+        })
+        //console.log(res.data)
         setInput('')
+        setChanger(!changer)
     }
     const handleKeyDown = (e) => {
         if (e.key === "Enter") {
@@ -106,7 +165,6 @@ function LawContent() {
         }
     }
     const classes = useStyles();
-    const status='done'
     const statusToData={
         done:{
             class:classes.statusDone,
@@ -122,13 +180,37 @@ function LawContent() {
         }
     }
     const bull = <span className={classes.bullet}>•</span>;
+    const goPDF=()=>{
+        if(data.pdf===null) alert('PDF 원문이 없습니다.')
+        else window.location.href=data.pdf
+    }
+    const lawLikeDislike=async (type)=>{
+        if(!props.user.isLogin){
+            alert('로그인이 필요합니다.')
+            return
+        }
+        const res=await axios.post('/like_law',{
+            username:props.user.userID,
+            like_dislike:type,
+            law_id:lawId
+        })
+        //console.log(res.data)
+        const {success}=res.data
+        if(success){
+            setChanger(!changer)
+        }else{
+            alert('이미 클릭하셨습니다.')
+        }
+    }
+    const clickLike=()=>{lawLikeDislike('like')}
+    const clickDislike=()=>{lawLikeDislike('dislike')}
     
     return (
         <Grid container justify='center'>
             <Grid container className={classes.grid} spacing={4}>
                 <Grid item xs={12}>
                     <Grid container justify='center'>
-                        <Typography variant='h3'><b>ㅁㄴㅇㄹ에 관한 법률 일부개정법률안</b></Typography>
+                        <Typography variant='h3'><b>{data.name}</b></Typography>
                     </Grid>
                 </Grid>
                 <Grid item xs={12} sm={4}>
@@ -139,7 +221,7 @@ function LawContent() {
                         </Typography>
                         <Grid container justify='center'><CreateTwoTone className={classes.icon}/></Grid>
                             <Typography variant="h5" className={classes.text}>
-                                <b>ㅇㅇㅇ 의원 외 00인</b>
+                                <b>{data.maker}</b>
                         </Typography>
                         </CardContent>
                     </Card>
@@ -155,12 +237,12 @@ function LawContent() {
                         <Grid container justify='center' className={classes.buttonGrid}>
                             <Grid item xs={12} sm={6}>
                                 <Grid container justify='center'>
-                                <Button className={classes.statusDone}><ThumbUpTwoTone className={classes.buttonIcon}/>찬성 999</Button>
+                                <Button className={classes.statusDone} onClick={clickLike}><ThumbUpTwoTone className={classes.buttonIcon}/>찬성 {data.likes}</Button>
                                 </Grid>
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <Grid container justify='center'>
-                                <Button className={classes.statusDisagree}><ThumbDownTwoTone className={classes.buttonIcon}/>반대 999</Button>
+                                <Button className={classes.statusDisagree} onClick={clickDislike}><ThumbDownTwoTone className={classes.buttonIcon}/>반대 {data.dislikes}</Button>
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -172,19 +254,19 @@ function LawContent() {
                             <Typography className={classes.title} >
                                 <b>현재 상태</b>
                         </Typography>
-                        <Grid container justify='center' className={statusToData[status].class}>
+                        <Grid container justify='center' className={statusToData[data.status].class}>
                             {
-                                (status==='done')
+                                (data.status==='done')
                                 ?<CheckCircle className={classes.icon}/>
                                 :(
-                                    status==='disagree'
+                                    data.status==='disagree'
                                     ?<Clear className={classes.icon}/>
                                     :<Cached className={classes.icon}/>
                                 )
                             }
                         </Grid>
-                            <Typography variant="h5" className={[classes.text,statusToData[status].class]}>
-                                <b>{statusToData[status].text}</b>
+                            <Typography variant="h5" className={[classes.text,statusToData[data.status].class]}>
+                                <b>{statusToData[data.status].text}</b>
                         </Typography>
                         </CardContent>
                     </Card>
@@ -196,19 +278,12 @@ function LawContent() {
                                 <b>법안 정보</b>
                         </Typography>
                             <Typography variant="h5" component="h2">
-                            나라의 말이
-                            중국과 달라
-                            한문·한자와 서로 통하지 아니하므로
-                            이런 까닭으로 어리석은 백성이 이르고자 하는 바가 있어도
-                            끝내 제 뜻을 능히 펴지 못하는 사람이 많다.
-                            내가 이를 위해 불쌍히 여겨
-                            새로 스물여덟 글자를 만드니
-                            사람마다 하여금 쉬이 익혀 날마다 씀에 편안케 하고자 할 따름이다.
+                            {data.content}
                         </Typography>
                         <Grid container justify='center'>
                             <Grid item xs={12}>
                                 <Grid container justify='center'>
-                                <Button><Description className={classes.buttonIcon}/>PDF 원문 보기</Button>
+                                <Button onClick={goPDF}><Description className={classes.buttonIcon}/>PDF 원문 보기</Button>
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -238,12 +313,12 @@ function LawContent() {
                                     <Grid container justify='center'>
                                         <Grid item xs={12} sm={6}>
                                             <Grid container justify='center'>
-                                            <FormControlLabel value="agree" control={<Radio />} label="찬성" />
+                                            <FormControlLabel value="like" control={<Radio />} label="찬성" />
                                             </Grid>
                                         </Grid>
                                         <Grid item xs={12} sm={6}>
                                         <Grid container justify='center'>
-                                        <FormControlLabel value="disagree" control={<Radio />} label="반대" />
+                                        <FormControlLabel value="dislike" control={<Radio />} label="반대" />
                                         </Grid>
                                         </Grid>
                                     </Grid>
@@ -260,42 +335,24 @@ function LawContent() {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <Grid container spacing={2}>
-                        <Grid item xs={12}><LawComment side='agree' text='
-                        정말 좋은 법안이네요.
-                        '/></Grid>
-                        <Grid item xs={12}><LawComment side='agree' text='
-                        나라의 말이
-                        중국과 달라
-                        한문·한자와 서로 통하지 아니하므로
-                        이런 까닭으로 어리석은 백성이 이르고자 하는 바가 있어도
-                        끝내 제 뜻을 능히 펴지 못하는 사람이 많다.
-                        내가 이를 위해 불쌍히 여겨
-                        새로 스물여덟 글자를 만드니
-                        사람마다 하여금 쉬이 익혀 날마다 씀에 편안케 하고자 할 따름이다.
-                        '/></Grid>
-                        <Grid item xs={12}><LawComment side='agree' text='
-                        정말 좋은 법안이네요.
-                        '/></Grid>
-                        <Grid item xs={12}><LawComment side='agree' text='
-                        정말 좋은 법안이네요.
-                        '/></Grid>
+                        {
+                            data.likeComment.map((comment)=>{
+                                return (
+                                    <Grid item xs={12}><LawComment side='agree' text={comment.comment} likes={comment.comment_like} id={comment.comment_id} {...{changer,setChanger}} {...props}/></Grid>
+                                )
+                            })
+                        }
                     </Grid>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <Grid container spacing={2}>
-                        <Grid item xs={12}><LawComment side='disagree' text='
-                        나라의 말이
-                        중국과 달라
-                        한문·한자와 서로 통하지 아니하므로
-                        이런 까닭으로 어리석은 백성이 이르고자 하는 바가 있어도
-                        끝내 제 뜻을 능히 펴지 못하는 사람이 많다.
-                        내가 이를 위해 불쌍히 여겨
-                        새로 스물여덟 글자를 만드니
-                        사람마다 하여금 쉬이 익혀 날마다 씀에 편안케 하고자 할 따름이다.
-                        '/></Grid>
-                        <Grid item xs={12}><LawComment side='disagree' text='
-                        정말 좋은 법안이네요.
-                        '/></Grid>
+                    {
+                            data.dislikeComment.map((comment)=>{
+                                return (
+                                    <Grid item xs={12}><LawComment side='disagree' text={comment.comment} likes={comment.comment_like} id={comment.comment_id} {...{changer,setChanger}} {...props}/></Grid>
+                                )
+                            })
+                        }
                     </Grid>
                 </Grid>
             </Grid>
