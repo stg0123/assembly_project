@@ -11,6 +11,8 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
         cursor: 'pointer',
+        fontFamily: 'Jua',
+        fontWeight: "bold",
         flexShrink: 0
     },
     buttons: {
@@ -41,7 +43,7 @@ function Header(props) {
         <AppBar position="static" elevation={0} className={classes.root}>
             <Toolbar>
                 <Typography variant="h5" className={classes.title} onClick={() => { props.history.push('/') }}>
-                    국회.gg
+                    국회.GG
           </Typography>
                 <div className={classes.buttons}>
                     <Button color={type === 'law' ? "secondary" : "inherit"} variant={type === 'law' ? "contained" : "text"} onClick={() => { props.history.push('/') }}>법안</Button>

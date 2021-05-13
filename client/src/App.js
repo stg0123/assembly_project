@@ -10,6 +10,8 @@ import { useState } from 'react'
 import Main from './components/Main';
 import LawSearch from './components/LawSearch';
 import PersonSearch from './components/PersonSearch';
+import PersonDetail from './components/PersonDetail';
+import LawContent from './components/LawContent'
 
 const theme = createMuiTheme({
   palette: {
@@ -20,12 +22,7 @@ const theme = createMuiTheme({
       main: '#2F4170'
     },
   },
-  typography: {
-    fontFamily: [
-      'Jua',
-      'Black Han Sans'
-    ].join(','),
-  },
+
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -58,10 +55,12 @@ function App(props) {
         </Switch>
         <Switch>
           <Route path="/person/search" component={(props) => <PersonSearch {...props} {...dataProps} type='person' />} />
+          <Route path="/person/detail/:id" component={(props) => <PersonDetail {...props} {...dataProps} type='person' />} />
           <Route path="/person" component={(props) => <Main {...props} {...dataProps} type='person' />} />
           <Route path='/signin' component={(props) => <SignIn {...props} {...dataProps} />} />
           <Route path='/signup' component={(props) => <SignUp {...props} {...dataProps} />} />
           <Route path='/search' component={(props) => <LawSearch {...props} {...dataProps} />} />
+          <Route path='/content' component={(props) => <LawContent {...props} {...dataProps} />} />
           <Route path="/" component={(props) => <Main {...props} {...dataProps} type='law' />} />
         </Switch>
       </BrowserRouter>
