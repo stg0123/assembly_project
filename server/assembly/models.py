@@ -99,6 +99,7 @@ class Comments(models.Model):
     like_dislike = models.TextField(blank=True, null=True)
     law_id = models.CharField(max_length=1000, blank=True, null=True)
     comment_like = models.IntegerField(blank=True, null=True)
+    # law = models.ForeignKey(Law, on_delete=models.PROTECT)
 
     class Meta:
         managed = False
@@ -107,7 +108,8 @@ class Comments(models.Model):
 
 class CommentsLike(models.Model):
     user_id = models.CharField(primary_key=True, max_length=255)
-    comment_id = models.IntegerField(blank=True, null=True)
+    # comment_id = models.IntegerField(blank=True, null=True)
+    comment = models.ForeignKey(Comments, on_delete=models.PROTECT)
 
     class Meta:
         managed = False
