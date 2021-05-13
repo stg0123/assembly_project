@@ -54,8 +54,8 @@ class Top3Viewset(viewsets.ModelViewSet):
 def law_detail(request, law_id):
     detail = list(Law.objects.filter(law_id=law_id).values())[0]
     comments = sorted(list(Comments.objects.filter(law_id=law_id).values()), key=lambda c: -c['comment_like'])
-    like_comments = [comment for comment in comments if comment['like_dislike']=='찬성']
-    dislikes_comments = [comment for comment in comments if comment['like_dislike']=='반대']
+    like_comments = [comment for comment in comments if comment['like_dislike']=='like']
+    dislikes_comments = [comment for comment in comments if comment['like_dislike']=='dislike']
 
     return JsonResponse({
         'detail': detail,
