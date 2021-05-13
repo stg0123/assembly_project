@@ -7,7 +7,7 @@ from rest_framework.parsers import JSONParser
 @csrf_exempt
 def account_list(request):
     if request.method == 'GET':
-        query_set = AuthUser.objects.all()
+        query_set = Account.objects.all()
         serializer = AccountSerializer(query_set, many=True)
         return JsonResponse(serializer.data, safe=False)
 
@@ -23,7 +23,7 @@ def account_list(request):
 @csrf_exempt
 def account(request, pk):
 
-    obj = AuthUser.objects.get(pk=pk)
+    obj = Account.objects.get(pk=pk)
 
     if request.method == 'GET':
         serializer = AccountSerializer(obj)
@@ -46,9 +46,9 @@ def account(request, pk):
 def login(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
-        search_email = data['username']
+        search_email = data['email']
         obj = AuthUser.objects.get(email=search_email)
-
         if data['password'] == obj.password:
             return HttpResponse(status=200)
-        return HttpResponse(status=400)
+        else:
+            return HttpResponse(status=400)
