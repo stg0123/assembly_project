@@ -71,7 +71,7 @@ def account_list(request):
         #error handle
         temp['success']=False
         temp['message']=str(serializer.errors['username']).split("'")[1]
-        return JsonResponse(temp, status=400)
+        return JsonResponse(temp, status=200)
 
 
 @csrf_exempt
@@ -107,4 +107,4 @@ def login(request):
         if data['password']==obj.password:
         #if user:
             return JsonResponse({"success": True,"message": "login success"},status=200)
-        return JsonResponse({"success": False,"message": "login fail"},status=400)
+        return JsonResponse({"success": False,"message": "login fail"},status=200)
