@@ -1,45 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import LawSearchCard from './LawSearchCard';
 
 const useStyles = makeStyles({
-    root: {
-        minWidth: 300,
-        margin: '10px',
-        cursor: 'pointer'
-    },
-    bullet: {
-        display: 'inline-block',
-        margin: '0 2px',
-        transform: 'scale(0.8)',
-    },
-    title: {
-        fontSize: 14,
-    },
-    pos: {
-        marginBottom: 12,
-    },
     grid: {
         width: '60%'
-    },
-    barAgree: {
-        backgroundColor: 'blue'
-    },
-    barDisagree: {
-        backgroundColor: 'red'
-    },
-    bar: {
-        fontSize: '10px',
-        marginBottom: '10px'
-    },
-    result: {
-        marginTop: '10px'
     }
 });
 
-const getData = (searchStr) => {
+const getData = () => {
+    const searchStr = "최신 법률법률"
     return [{
         name: `대충 ${searchStr} 법률 이름이 있을걸에 관한 법률 일부개정법률안`,
         maker: 'ㅇㅇㅇ 의원 외 00명',
@@ -66,37 +37,22 @@ const getData = (searchStr) => {
     }]
 }
 
-function LawSearch(props) {
-    const { Target, setTarget } = props
+const RecentLaw = (props) => {
     const [List, setList] = useState([])
-    const [searchTarget, setsearchTarget] = useState('')
+    const classes = useStyles();
+
     useEffect(() => {
-        setList(getData(Target))
-    }, [Target])
-    const classes = useStyles()
-    const bull = <span className={classes.bullet}>•</span>;
-    const handleChange = searchTarget => event => {
-        setsearchTarget(event.target.value)
-    };
+        setList(getData())
+    }, []);
     return (
         <Grid container justify='center'>
-            <Grid container className={classes.grid} alignItems='center' justify='center'>
-                <Typography className={classes.result} variant='h4'>{Target}에 대한 검색 결과입니다.</Typography>
-            </Grid>
             <Grid container className={classes.grid} alignItems='flex-start' justify='center'>
                 {List.map((info) => {
                     return (<LawSearchCard {...props} {...info} />)
                 })}
-                {List.length == 0
-                    ? <LawSearchCard {...props} {...{
-                        name: '검색 결과가 없습니다.',
-                        agree: 0,
-                        disagree: 0
-                    }} /> : <></>}
             </Grid>
         </Grid>
-
-    )
+    );
 }
 
-export default LawSearch
+export default RecentLaw;

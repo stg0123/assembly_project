@@ -13,18 +13,11 @@ import LawSearch from './components/LawSearch';
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: "#5383e8"
+      main: "#5383e8",
     },
     secondary: {
       main: '#2F4170'
     },
-    up: {
-      main: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)'
-    },
-    down: {
-      main: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)'
-    }
-
   },
   typography: {
     fontFamily: [

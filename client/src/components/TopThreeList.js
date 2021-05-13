@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
             color: '#4791db'
         },
         '& .down': {
-            color: '#dc004e'
+            color: '#f44336'
         },
     },
     actions: {
