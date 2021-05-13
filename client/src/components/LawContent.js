@@ -128,7 +128,7 @@ function LawContent() {
             <Grid container className={classes.grid} spacing={4}>
                 <Grid item xs={12}>
                     <Grid container justify='center'>
-                        <Typography variant='h3'>ㅁㄴㅇㄹ에 관한 법률 일부개정법률안</Typography>
+                        <Typography variant='h3'><b>ㅁㄴㅇㄹ에 관한 법률 일부개정법률안</b></Typography>
                     </Grid>
                 </Grid>
                 <Grid item xs={12} sm={4}>
