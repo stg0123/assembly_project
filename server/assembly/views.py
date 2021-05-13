@@ -23,6 +23,13 @@ class LawViewset(viewsets.ModelViewSet):
     serializer_class = LawSerializer
     pagination_class = LargeResultsSetPagination
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        search = self.request.GET.get('search', '')
+        if search:
+            qs = qs.filter(bill_name__contains=search)
+        return qs
+
 class Top3Viewset(viewsets.ModelViewSet):
     queryset = Law.objects.annotate(like_sum=F('law_like')+F('law_dislike')).order_by('-like_sum')[:3]
     serializer_class = LawSerializer
