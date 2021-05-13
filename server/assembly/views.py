@@ -139,14 +139,17 @@ def account(request, pk):
         return HttpResponse(status=204)
 
 @csrf_exempt
-def person_detail(request,name):
+def person_detail(request,id):
     if request.method == 'GET':
-        data1 = LawmakerCareer.objects.filter(lawmaker_name=name)
-        data2 = LawmakerRecodeSerializer(LawmakerRecord.objects.filter(lawmaker_name=name)[0])
         result ={}
-        result[0]=data2.data
-        n=1
-        for d in data1:
+        data1 = LawmakerSerializer(Lawmaker.objects.get(id=id))
+        name = data1.data["name"]
+        data2 = LawmakerRecodeSerializer(LawmakerRecord.objects.filter(lawmaker_name=name)[0])
+        data3 = LawmakerCareer.objects.filter(lawmaker_name=name)
+        result[0]=data1.data
+        result[1]=data2.data
+        n=2
+        for d in data3:
             result[n] = LawmakerCarrerSerializer(d).data
             n+=1
     return JsonResponse(result, safe=False, json_dumps_params={'ensure_ascii': False})
