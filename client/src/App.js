@@ -35,7 +35,7 @@ function App(props) {
   const classes = useStyles();
   const [User, setUser] = useState({
     isLogin: true,
-    userID: 'asdfasdfasdf'
+    userID: 'testtest'
   })
   const [Target, setTarget] = useState('테스트')
   const dataProps = {

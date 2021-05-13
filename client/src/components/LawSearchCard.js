@@ -63,12 +63,12 @@ function LawSearchCard(props) {
 
     const getAgreePercent = () => {
         if (agree == 0 && disagree == 0) return '50%'
-        return `${parseInt((agree / (agree + disagree)) * 100)}%`
+        return `${Math.round((agree / (agree + disagree)) * 100)}%`
     }
 
     const getDisgreePercent = () => {
         if (agree == 0 && disagree == 0) return '50%'
-        return `${parseInt((disagree / (agree + disagree)) * 100)}%`
+        return `${Math.round((disagree / (agree + disagree)) * 100)}%`
     }
 
     const lawClick=()=>{

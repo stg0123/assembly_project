@@ -60,8 +60,22 @@ const useStyles = makeStyles({
 
 function LawComment(props){
     const classes = useStyles();
-    const {text,side,likes,id}=props
+    const {text,side,likes,id,changer,setChanger}=props
     const sideClass=side=='agree'?classes.commentAgree:classes.commentDisagree
+    const commentLike=async ()=>{
+        if(!props.user.isLogin){
+            alert('로그인이 필요합니다.')
+            return
+        }
+        const res=await axios.post('/like_comment',{
+            username:props.user.userID,
+            comment_id:id
+        })
+        const {success}=res.data
+        //console.log(res.data)
+        if(!success) alert('이미 클릭하셨습니다.')
+        setChanger(!changer)
+    }
     return (<Card className={[classes.root,sideClass]}>
     <CardContent>
         <Typography className={classes.title} gutterBottom>
@@ -74,7 +88,7 @@ function LawComment(props){
     <Grid container justify='center' className={classes.buttonGrid}>
         <Grid item xs={12}>
             <Grid container justify='center'>
-            <Button><ThumbUpTwoTone className={classes.buttonIcon}/>좋아요 {likes}</Button>
+            <Button onClick={commentLike}><ThumbUpTwoTone className={classes.buttonIcon}/>좋아요 {likes}</Button>
             </Grid>
         </Grid>
     </Grid>
@@ -98,6 +112,7 @@ function LawContent(props) {
         likeComment:[],
         dislikeComment:[]
     })
+    const [changer,setChanger]=useState(true)
     const { lawId } = useParams();
     useEffect(async ()=>{
         let {detail,like_comments,dislikes_comments} = await getData(lawId)
@@ -112,7 +127,7 @@ function LawContent(props) {
             likeComment:like_comments,
             dislikeComment:dislikes_comments
         })
-    },[lawId])
+    },[lawId,changer])
 
     const handleRadio = (e) =>{
         setRadio(e.target.value)
@@ -120,7 +135,11 @@ function LawContent(props) {
     const changeInput = (e) => {
         setInput(e.target.value.replace('\n',''));
     }
-    const onSubmit=()=>{
+    const onSubmit=async ()=>{
+        if(!props.user.isLogin){
+            alert('로그인이 필요합니다.')
+            return
+        }
         if(radio===''){
             alert('찬성 또는 반대를 선택해주십시오.')
             return
@@ -130,8 +149,15 @@ function LawContent(props) {
             return
         }
 
-        console.log(input,radio)
+        const res=await axios.post('/append_comment',{
+            username:props.user.userID,
+            law_id:lawId,
+            content:input,
+            like_dislike:radio
+        })
+        //console.log(res.data)
         setInput('')
+        setChanger(!changer)
     }
     const handleKeyDown = (e) => {
         if (e.key === "Enter") {
@@ -168,17 +194,10 @@ function LawContent(props) {
             like_dislike:type,
             law_id:lawId
         })
-        console.log(res.data)
+        //console.log(res.data)
         const {success}=res.data
         if(success){
-            if(type==='like') setData({
-                ...data,
-                likes:data.likes+1
-            })
-            else setData({
-                ...data,
-                dislikes:data.dislikes+1
-            })
+            setChanger(!changer)
         }else{
             alert('이미 클릭하셨습니다.')
         }
@@ -294,12 +313,12 @@ function LawContent(props) {
                                     <Grid container justify='center'>
                                         <Grid item xs={12} sm={6}>
                                             <Grid container justify='center'>
-                                            <FormControlLabel value="agree" control={<Radio />} label="찬성" />
+                                            <FormControlLabel value="like" control={<Radio />} label="찬성" />
                                             </Grid>
                                         </Grid>
                                         <Grid item xs={12} sm={6}>
                                         <Grid container justify='center'>
-                                        <FormControlLabel value="disagree" control={<Radio />} label="반대" />
+                                        <FormControlLabel value="dislike" control={<Radio />} label="반대" />
                                         </Grid>
                                         </Grid>
                                     </Grid>
@@ -319,7 +338,7 @@ function LawContent(props) {
                         {
                             data.likeComment.map((comment)=>{
                                 return (
-                                    <Grid item xs={12}><LawComment side='agree' text={comment.comment} likes={comment.comment_like} id={comment.comment_id}/></Grid>
+                                    <Grid item xs={12}><LawComment side='agree' text={comment.comment} likes={comment.comment_like} id={comment.comment_id} {...{changer,setChanger}} {...props}/></Grid>
                                 )
                             })
                         }
@@ -330,7 +349,7 @@ function LawContent(props) {
                     {
                             data.dislikeComment.map((comment)=>{
                                 return (
-                                    <Grid item xs={12}><LawComment side='disagree' text={comment.comment} likes={comment.comment_like} id={comment.comment_id}/></Grid>
+                                    <Grid item xs={12}><LawComment side='disagree' text={comment.comment} likes={comment.comment_like} id={comment.comment_id} {...{changer,setChanger}} {...props}/></Grid>
                                 )
                             })
                         }
