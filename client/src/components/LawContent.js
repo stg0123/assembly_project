@@ -62,7 +62,7 @@ function LawComment(props){
     return (<Card className={[classes.root,sideClass]}>
     <CardContent>
         <Typography className={classes.title} gutterBottom>
-            {side=='agree'?'찬성':'반대'} 의견
+            <b>{side=='agree'?'찬성':'반대'} 의견</b>
     </Typography>
    <Grid container justify='center'>
        {text}
@@ -284,7 +284,14 @@ function LawContent() {
                 <Grid item xs={12} sm={6}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}><LawComment side='disagree' text='
-                        정말 좋은 법안이네요.
+                        나라의 말이
+                        중국과 달라
+                        한문·한자와 서로 통하지 아니하므로
+                        이런 까닭으로 어리석은 백성이 이르고자 하는 바가 있어도
+                        끝내 제 뜻을 능히 펴지 못하는 사람이 많다.
+                        내가 이를 위해 불쌍히 여겨
+                        새로 스물여덟 글자를 만드니
+                        사람마다 하여금 쉬이 익혀 날마다 씀에 편안케 하고자 할 따름이다.
                         '/></Grid>
                         <Grid item xs={12}><LawComment side='disagree' text='
                         정말 좋은 법안이네요.
