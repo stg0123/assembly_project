@@ -12,6 +12,8 @@ from .serializers import LawSerializer, LawmakerSerializer
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets
 from django.db.models import F
+from django.shortcuts import get_object_or_404
+
 
 class LargeResultsSetPagination(PageNumberPagination):
     page_size = 10
@@ -70,7 +72,11 @@ def like_law(request):
         like_dislike = data['like_dislike']
         law_id = data['law_id']
 
-        ll = LikeLaw.objects.get(user_id=user_id)
+        try:
+            ll = LikeLaw.objects.get(user_id=user_id)
+        except LikeLaw.DoesNotExist:
+            ll = None
+
         if ll:
             return JsonResponse({"success": False, "message": "already clicked"}, status=200)
 
