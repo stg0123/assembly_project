@@ -20,4 +20,5 @@ urlpatterns += [
     path('law_detail/<str:law_id>', law_detail),
     path('like_law', like_law),
     path('append_comment', append_comment),
+    path('like_comment', like_comment),
 ]
