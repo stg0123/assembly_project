@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate
 import datetime
 
 from rest_framework.parsers import JSONParser
-from .models import Law, Lawmaker, Comments
+from .models import Law, Lawmaker, Comments, LikeLaw
 from .serializers import LawSerializer, LawmakerSerializer
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets
@@ -61,6 +61,28 @@ def law_detail(request, law_id):
         'dislikes_comments': dislikes_comments,
     }, safe=False, json_dumps_params={'ensure_ascii': False})
 
+
+@csrf_exempt
+def like_law(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        user_id = data['username']
+        like_dislike = data['like_dislike']
+        law_id = data['law_id']
+
+        ll = LikeLaw.objects.get(user_id=user_id)
+        if ll:
+            return JsonResponse({"success": False, "message": "already clicked"}, status=200)
+
+        LikeLaw.objects.create(user_id=user_id, law_id=law_id, like_dislike=like_dislike)
+        law = Law.objects.get(law_id=law_id)
+        if like_dislike == 'like':
+            law.law_like = law.law_like + 1
+        else:
+            law.law_dislike = law.law_dislike + 1
+        law.save()
+
+        return JsonResponse({"success": True,"message": "click success"},status=200)
 
 @csrf_exempt
 def account_list(request):
