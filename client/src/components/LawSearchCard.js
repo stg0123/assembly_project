@@ -35,22 +35,22 @@ const useStyles = makeStyles({
 });
 
 function LawSearchCard(props) {
-    const { name, maker, date, content, agree, disagree } = props
+    const { name, maker, date, content, agree, disagree, code } = props
     const classes = useStyles()
     const bull = <span className={classes.bullet}>•</span>;
 
     const getAgreePercent = () => {
-        if (agree == 0 && disagree == 0) return '0%'
+        if (agree == 0 && disagree == 0) return '50%'
         return `${parseInt((agree / (agree + disagree)) * 100)}%`
     }
 
     const getDisgreePercent = () => {
-        if (agree == 0 && disagree == 0) return '0%'
+        if (agree == 0 && disagree == 0) return '50%'
         return `${parseInt((disagree / (agree + disagree)) * 100)}%`
     }
 
     return (
-        <Card className={classes.root} onClick={() => { alert('asdf') }}>
+        <Card className={classes.root} onClick={() => { alert(code) }}>
             <CardContent>
                 <Grid container>
                     <Grid style={{ width: getAgreePercent() }} className={[classes.barAgree, classes.bar]}>ㅤ</Grid>

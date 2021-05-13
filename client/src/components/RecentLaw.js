@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import LawSearchCard from './LawSearchCard';
+import axios from 'axios'
 
 const useStyles = makeStyles({
     grid: {
@@ -9,40 +10,43 @@ const useStyles = makeStyles({
     }
 });
 
-const getData = () => {
-    const searchStr = "최신 법률법률"
-    return [{
-        name: `대충 ${searchStr} 법률 이름이 있을걸에 관한 법률 일부개정법률안`,
-        maker: 'ㅇㅇㅇ 의원 외 00명',
-        date: '2021년 5월 13일',
-        content: '대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ ',
-        agree: 100,
-        disagree: 20
-    },
-    {
-        name: `대충${searchStr}법안`,
-        maker: 'ㅇㅇㅇ 의원 외 00명',
-        date: '2021년 5월 13일',
-        content: '대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ ',
-        agree: 20,
-        disagree: 100
-    },
-    {
-        name: `${searchStr}의 결정에 관한 법률 일부개정법률안`,
-        maker: 'ㅇㅇㅇ 의원 외 00명',
-        date: '2021년 5월 13일',
-        content: '대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ 대충 법률 내용 설명 이러이러한 법입니다 ㅁㄴㅇㄹ ',
-        agree: 1000,
-        disagree: 896
-    }]
+const getData = async () => {
+    let {data}= await axios.get('/laws/?page_size=1')
+    // .then(({data})=>{
+    //     return data.results.map((law)=>{
+    //         return {
+    //             name:law.bill_name,
+    //             maker:`${law.main_lawmaker} ${law.proposal_kind}`+(law.sum_lawmaker>1?` 외 ${law.sum_lawmaker-1}인`:''),
+    //             date:law.propose_dt,
+    //             content:law.law_summary,
+    //             agree:law.law_like,
+    //             disagree:law.law_dislike,
+    //             code:law.bill_no
+    //         }
+    //     })
+    // })
+    
+    let tmp= data.results.map((law)=>{
+                 return {
+                     name:law.bill_name,
+                     maker:`${law.main_lawmaker} ${law.proposal_kind}`+(law.sum_lawmaker>1?` 외 ${law.sum_lawmaker-1}인`:''),
+                     date:law.propose_dt,
+                     content:law.law_summary,
+                     agree:law.law_like,
+                     disagree:law.law_dislike,
+                     code:law.bill_no
+                 }
+             })
+    console.log(tmp)
+    return tmp
 }
 
 const RecentLaw = (props) => {
     const [List, setList] = useState([])
     const classes = useStyles();
 
-    useEffect(() => {
-        setList(getData())
+    useEffect(async () => {
+        setList(await getData())
     }, []);
     return (
         <Grid container justify='center'>

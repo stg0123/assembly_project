@@ -5,6 +5,29 @@ from .serializers import AccountSerializer
 from rest_framework.parsers import JSONParser
 from django.contrib.auth import authenticate
 import datetime
+
+from rest_framework.parsers import JSONParser
+from .models import Law
+from .serializers import LawSerializer
+from rest_framework.pagination import PageNumberPagination
+from rest_framework import viewsets
+from django.db.models import F
+
+class LargeResultsSetPagination(PageNumberPagination):
+    page_size = 10
+    page_query_param = 'page_size'
+    max_page_size = 100
+
+class LawViewset(viewsets.ModelViewSet):
+    queryset = Law.objects.all()
+    serializer_class = LawSerializer
+    pagination_class = LargeResultsSetPagination
+
+class Top3Viewset(viewsets.ModelViewSet):
+    queryset = Law.objects.annotate(like_sum=F('law_like')+F('law_dislike')).order_by('-like_sum')[:3]
+    serializer_class = LawSerializer
+
+
 @csrf_exempt
 def account_list(request):
     if request.method == 'GET':
