@@ -1,4 +1,7 @@
 secret
+server/secrets.json
+.idea
+
 # Created by https://www.toptal.com/developers/gitignore/api/linux,python,node,react,visualstudiocode,django,pycharm
 # Edit at https://www.toptal.com/developers/gitignore?templates=linux,python,node,react,visualstudiocode,django,pycharm
 
