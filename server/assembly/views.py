@@ -112,7 +112,7 @@ def like_comment(request):
         comment_id = data['comment_id']
 
         try:
-            cl = CommentsLike.objects.get(Q(user_id=user_id) & Q(comment_id=comment_id))
+            cl = CommentsLike.objects.get(Q(user_id=user_id) & Q(id=comment_id))
         except CommentsLike.DoesNotExist:
             cl = None
 
@@ -120,7 +120,7 @@ def like_comment(request):
             return JsonResponse({"success": False, "message": "already clicked"}, status=200)
 
         CommentsLike.objects.create(user_id=user_id, comment_id=comment_id)
-        comment = Comments.objects.get(comment_id=comment_id)
+        comment = Comments.objects.get(id=comment_id)
         comment.comment_like = comment.comment_like + 1
         comment.save()
 
