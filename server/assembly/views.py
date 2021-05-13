@@ -108,7 +108,7 @@ def like_comment(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
         user_id = data['username']
-        law_id = data['law_id']
+        # law_id = data['law_id']
         comment_id = data['comment_id']
 
         try:
