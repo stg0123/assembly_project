@@ -7,8 +7,8 @@ from django.contrib.auth import authenticate
 import datetime
 
 from rest_framework.parsers import JSONParser
-from .models import Law
-from .serializers import LawSerializer
+from .models import Law, Lawmaker
+from .serializers import LawSerializer, LawmakerSerializer
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets
 from django.db.models import F
@@ -28,6 +28,18 @@ class LawViewset(viewsets.ModelViewSet):
         search = self.request.GET.get('search', '')
         if search:
             qs = qs.filter(bill_name__contains=search)
+        return qs
+
+class LawmakerViewset(viewsets.ModelViewSet):
+    queryset = Lawmaker.objects.all()
+    serializer_class = LawmakerSerializer
+    pagination_class = LargeResultsSetPagination
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        search = self.request.GET.get('search', '')
+        if search:
+            qs = qs.filter(name__contains=search)
         return qs
 
 class Top3Viewset(viewsets.ModelViewSet):
