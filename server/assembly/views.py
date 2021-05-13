@@ -107,12 +107,13 @@ def append_comment(request):
 def like_comment(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
+        print(data)
         user_id = data['username']
         # law_id = data['law_id']
         comment_id = data['comment_id']
 
         try:
-            cl = CommentsLike.objects.get(Q(user_id=user_id) & Q(id=comment_id))
+            cl = CommentsLike.objects.get(Q(user_id=user_id) & Q(comment_id=comment_id))
         except CommentsLike.DoesNotExist:
             cl = None
 
