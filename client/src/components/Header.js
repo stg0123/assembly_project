@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
         cursor: 'pointer',
+        fontFamily: 'Jua',
         flexShrink: 0
     },
     buttons: {

@@ -34,9 +34,14 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function MediaControlCard() {
+export default function Person(props) {
   const classes = useStyles();
   const theme = useTheme();
+  const id = "123";
+  const routeToDetail = () => {
+    props.history.push(`/person/detail/${id}`);
+
+  }
 
   return (
     <Container style={{ width: "60%", paddingTop: 30, paddingBottom: 30 }}>
@@ -60,9 +65,9 @@ export default function MediaControlCard() {
           </CardContent>
           <div >
             <CardActions className={classes.morebtn}>
-              <Button size="small" color="primary" >
+              <Button size="small" color="primary" onClick={routeToDetail}>
                 상세 보기
-        </Button>
+              </Button>
             </CardActions>
           </div>
         </div>

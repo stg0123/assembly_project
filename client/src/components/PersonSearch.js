@@ -7,10 +7,10 @@ const PersonSearch = (props) => {
     return (
         <Grid container justify='center'>
             <SearchBar type={props.type} {...props} />
-            <Person />
-            <Person />
-            <Person />
-            <Person />
+            <Person {...props} />
+            <Person {...props} />
+            <Person {...props} />
+            <Person {...props} />
         </Grid>
 
     );
