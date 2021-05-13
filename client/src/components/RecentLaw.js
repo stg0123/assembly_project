@@ -10,12 +10,17 @@ const useStyles = makeStyles({
         width: '60%'
     },
     more:{
-        margin:'10px'
+        margin:'10px',
+        paddingTop:'10px',
+        paddingBottom:'10px',
+        backgroundColor:'#5383e8',
+        color:'white',
+        cursor:'pointer'
     }  
 });
 
-const getData = async () => {
-    let { data } = await axios.get('/laws/?page_size=1')
+const getData = async (page) => {
+    let { data } = await axios.get(`/laws/?page_size=${page}`)
     let tmp = data.results.map((law) => {
         return {
             name: law.bill_name,
@@ -28,16 +33,29 @@ const getData = async () => {
         }
     })
     console.log(tmp)
-    return tmp
+    if(data.next!=null) return [tmp,true]
+    else return [tmp,false]
 }
 
 const RecentLaw = (props) => {
     const [List, setList] = useState([])
+    const [page,setPage] = useState(1)
+    let haveNext=true
     const classes = useStyles();
 
     useEffect(async () => {
-        setList(await getData())
-    }, []);
+        console.log(page)
+        let [tmp,ttmp]=await getData(page)
+        console.log(tmp)
+        haveNext=ttmp
+        setList([...List,...tmp])
+    }, [page]);
+
+    const moreClick=()=>{
+        if(haveNext){
+            setPage(page=>page+1)
+        }
+    }
     return (
         <Grid container justify='center'>
             <Grid container className={classes.grid} alignItems='flex-start' justify='center'>
@@ -45,8 +63,10 @@ const RecentLaw = (props) => {
                     return (<LawSearchCard {...props} {...info} />)
                 })}
                 <Grid item xs={12}>
-                <Card className={classes.more}>
-                    더보기
+                <Card className={classes.more} justify='center' onClick={moreClick}>
+                    <Grid container justify='center'>
+                        더보기
+                    </Grid>
                 </Card>
                 </Grid>
                 
