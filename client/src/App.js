@@ -1,24 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import SearchBar from './components/SearchBar';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import SignUp from './components/SignUp';
+import SignIn from './components/SignIn';
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: "#5383e8"
+    },
+    secondary: {
+      main: '#2F4170'
+    }
+  }
+});
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <MuiThemeProvider theme={theme}>
+      {/* <div className="App">
+        <SearchBar bill={true} />
+      </div> */}
+      <SignIn />
+    </MuiThemeProvider>
   );
 }
 
