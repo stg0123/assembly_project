@@ -73,7 +73,7 @@ function App(props) {
           <Route path='/' component={(props) => <Header {...props} type='law' {...dataProps} />} />
         </Switch>
         <Switch>
-          <Route path="/person/search" component={(props) => <PersonSearch {...props} {...dataProps} type='person' />} />
+          <Route path="/person/search/:word" component={(props) => <PersonSearch {...props} {...dataProps} type='person' />} />
           <Route path="/person/detail/:id" component={(props) => <PersonDetail {...props} {...dataProps} type='person' />} />
           <Route path="/person" component={(props) => <Main {...props} {...dataProps} type='person' />} />
           <Route path='/signin' component={(props) => <SignIn {...props} {...dataProps} />} />
