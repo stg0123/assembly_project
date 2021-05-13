@@ -11,32 +11,18 @@ const useStyles = makeStyles({
 });
 
 const getData = async () => {
-    let {data}= await axios.get('/laws/?page_size=1')
-    // .then(({data})=>{
-    //     return data.results.map((law)=>{
-    //         return {
-    //             name:law.bill_name,
-    //             maker:`${law.main_lawmaker} ${law.proposal_kind}`+(law.sum_lawmaker>1?` 외 ${law.sum_lawmaker-1}인`:''),
-    //             date:law.propose_dt,
-    //             content:law.law_summary,
-    //             agree:law.law_like,
-    //             disagree:law.law_dislike,
-    //             code:law.bill_no
-    //         }
-    //     })
-    // })
-    
-    let tmp= data.results.map((law)=>{
-                 return {
-                     name:law.bill_name,
-                     maker:`${law.main_lawmaker} ${law.proposal_kind}`+(law.sum_lawmaker>1?` 외 ${law.sum_lawmaker-1}인`:''),
-                     date:law.propose_dt,
-                     content:law.law_summary,
-                     agree:law.law_like,
-                     disagree:law.law_dislike,
-                     code:law.bill_no
-                 }
-             })
+    let { data } = await axios.get('/laws/?page_size=1')
+    let tmp = data.results.map((law) => {
+        return {
+            name: law.bill_name,
+            maker: `${law.main_lawmaker} ${law.proposal_kind}` + (law.sum_lawmaker > 1 ? ` 외 ${law.sum_lawmaker - 1}인` : ''),
+            date: law.propose_dt,
+            content: law.law_summary,
+            agree: law.law_like,
+            disagree: law.law_dislike,
+            code: law.bill_no
+        }
+    })
     console.log(tmp)
     return tmp
 }

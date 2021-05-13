@@ -25,6 +25,8 @@
 
 ## 🗂 구성도
 
+<img src="./resources/diagram.png"/>
+
 ## 📔 DB 구조
 
 ## 🖥 실행 화면
