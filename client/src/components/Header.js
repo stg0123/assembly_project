@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Header(props) {
     const { type } = props
-    const { isLogin, userEmail } = props.user
+    const { isLogin, userID } = props.user
     const classes = useStyles();
     const logout = () => {
         props.setUser({ ...props.user, isLogin: false })
@@ -49,8 +49,8 @@ function Header(props) {
                 </div>
                 {
                     isLogin
-                        ? <Button color="inherit" onClick={logout} className={classes.logoutButton}><AccountCircleIcon className={classes.icon} />{userEmail} 로그아웃</Button>
-                        : <Button color="inherit" onClick={() => { props.history.push('/login') }}><AccountCircleIcon className={classes.icon} />로그인</Button>
+                        ? <Button color="inherit" onClick={logout} className={classes.logoutButton}><AccountCircleIcon className={classes.icon} />{userID} 로그아웃</Button>
+                        : <Button color="inherit" onClick={() => { props.history.push('/signin') }}><AccountCircleIcon className={classes.icon} />로그인</Button>
                 }
 
             </Toolbar>

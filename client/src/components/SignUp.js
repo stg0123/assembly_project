@@ -13,6 +13,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useState } from 'react';
 
+import crypto from 'crypto';
+
 function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
@@ -53,15 +55,44 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SignUp() {
+export default function SignUp(props) {
     const classes = useStyles();
     const [userInfo, setUserInfo] = useState({});
 
     const changeUserInfo = (e) => {
         setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
     }
+
+    const doCheck=(data)=>{return {success:true,message:'이미 존재하는 계정입니다.'}}
+
     const onSubmit = () => {
-        console.log(userInfo);
+        if(!userInfo.ID){
+            alert('ID가 입력되지 않았습니다.')
+            return
+        }
+        if(!userInfo.password){
+            alert('비밀번호가 입력되지 않았습니다.')
+            return
+        }
+        if (userInfo.password !== userInfo.passwordConfirm) {
+            alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.')
+            return
+        }
+        const {success,message}=doCheck({
+            ID:userInfo.ID,
+            Password:crypto.createHash('sha256').update(userInfo.password).digest('hex')
+        })
+        if(success){
+            alert('회원가입에 성공했습니다. 로그인해 주십시오.')
+            props.history.push('/signin')
+        } else{
+            alert(`회원가입에 실패했습니다. ${message}`)
+        }
+    }
+    const onKeyPress = (e) =>{
+        if(e.key==='Enter'){
+            onSubmit()
+        }
     }
 
     return (
@@ -74,17 +105,18 @@ export default function SignUp() {
                 <Typography component="h1" variant="h5">
                     회원가입
         </Typography>
-                <form className={classes.form} noValidate >
+                <form className={classes.form} noValidate onSubmit={onSubmit}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <TextField
                                 variant="standard"
                                 fullWidth
-                                id="email"
-                                label="이메일 주소"
-                                name="email"
-                                autoComplete="email"
+                                id="ID"
+                                label="ID"
+                                name="ID"
+                                autoComplete="ID"
                                 onChange={e => changeUserInfo(e)}
+                                onKeyPress={onKeyPress}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -97,6 +129,19 @@ export default function SignUp() {
                                 id="password"
                                 autoComplete="current-password"
                                 onChange={e => changeUserInfo(e)}
+                                onKeyPress={onKeyPress}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                variant="standard"
+                                fullWidth
+                                name="passwordConfirm"
+                                label="비밀번호 확인"
+                                type="password"
+                                id="passwordConfirm"
+                                onChange={e => changeUserInfo(e)}
+                                onKeyPress={onKeyPress}
                             />
                         </Grid>
                     </Grid>
@@ -112,7 +157,7 @@ export default function SignUp() {
           </Button>
                     <Grid container justify="flex-end">
                         <Grid item>
-                            <Link href="#" variant="body2">
+                            <Link onClick={() => { props.history.push('signin') }} variant="body2">
                                 이미 계정이 있으신가요? 로그인하기
               </Link>
                         </Grid>
