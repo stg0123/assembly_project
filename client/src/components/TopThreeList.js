@@ -80,10 +80,11 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const TopThreeItem = ({ bill, rank }) => {
+const TopThreeItem = (props) => {
+    const {bill,rank}=props
     const classes = useStyles();
     const routeToBill = () => {
-        console.log(bill.id);
+        props.history.push(`/content/${bill.code}`)
     }
     return (
         <Card className={classes.card}>
@@ -128,14 +129,14 @@ const getTopThree = async () => {
             content: law.law_summary,
             agree: law.law_like,
             disagree: law.law_dislike,
-            code: law.bill_no
+            code: law.law_id
         }
     })
     console.log(tmp);
     return tmp;
 }
 
-const TopThreeList = () => {
+const TopThreeList = (props) => {
     const classes = useStyles();
     const [topThree, setTopThree] = useState([]);
     useEffect(async () => {
@@ -144,7 +145,7 @@ const TopThreeList = () => {
     return (
         <GridList cols={3} className={classes.root} style={{ margin: "30px auto" }} spacing={3}>
             {topThree.map((item, index) => (
-                <GridListTile key={item.name} style={{ height: "auto" }}><TopThreeItem bill={item} rank={index + 1} /></GridListTile>
+                <GridListTile key={item.name} style={{ height: "auto" }}><TopThreeItem bill={item} rank={index + 1} {...props}/></GridListTile>
             ))}
         </GridList>
     )

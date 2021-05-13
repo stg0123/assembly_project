@@ -29,7 +29,7 @@ const getData = async (page) => {
             content: law.law_summary,
             agree: law.law_like,
             disagree: law.law_dislike,
-            code: law.bill_no
+            code: law.law_id
         }
     })
     console.log(tmp)
