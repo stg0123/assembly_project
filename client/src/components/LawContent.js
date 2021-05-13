@@ -135,11 +135,11 @@ function LawContent() {
                     <Card className={classes.root}>
                         <CardContent>
                             <Typography className={classes.title} >
-                                발의자
+                                <b>발의자</b>
                         </Typography>
                         <Grid container justify='center'><CreateTwoTone className={classes.icon}/></Grid>
                             <Typography variant="h5" className={classes.text}>
-                                ㅇㅇㅇ 의원 외 00인
+                                <b>ㅇㅇㅇ 의원 외 00인</b>
                         </Typography>
                         </CardContent>
                     </Card>
@@ -148,7 +148,7 @@ function LawContent() {
                     <Card className={classes.root}>
                         <CardContent>
                             <Typography className={classes.title} gutterBottom>
-                                법안에 대한 의견 표시
+                                <b>법안에 대한 의견 표시</b>
                         </Typography>
                        <Grid container justify='center'><ThumbsUpDownTwoTone className={classes.icon}/></Grid>
                         </CardContent>
@@ -170,7 +170,7 @@ function LawContent() {
                     <Card className={classes.root}>
                         <CardContent>
                             <Typography className={classes.title} >
-                                현재 상태
+                                <b>현재 상태</b>
                         </Typography>
                         <Grid container justify='center' className={statusToData[status].class}>
                             {
@@ -184,7 +184,7 @@ function LawContent() {
                             }
                         </Grid>
                             <Typography variant="h5" className={[classes.text,statusToData[status].class]}>
-                                {statusToData[status].text}
+                                <b>{statusToData[status].text}</b>
                         </Typography>
                         </CardContent>
                     </Card>
@@ -193,7 +193,7 @@ function LawContent() {
                     <Card className={classes.root}>
                         <CardContent>
                             <Typography className={classes.title} gutterBottom>
-                                법안 정보
+                                <b>법안 정보</b>
                         </Typography>
                             <Typography variant="h5" component="h2">
                             나라의 말이
