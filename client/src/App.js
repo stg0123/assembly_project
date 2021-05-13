@@ -29,8 +29,7 @@ function App(props) {
   const classes = useStyles();
   const [User, setUser] = useState({
     isLogin: true,
-    userEmail: 'helloworld@test.com',
-    userName: '전세환'
+    userID: 'test123'
   })
   const dataProps = {
     user: User,
@@ -41,8 +40,13 @@ function App(props) {
       <BrowserRouter>
         <Switch>
           <Route path='/person' component={(props) => <Header {...props} type='person' {...dataProps} />} />
-          <Route path='/login' component={(props) => <Header {...props} type='login' {...dataProps} />} />
+          <Route path='/signin' component={(props) => <Header {...props} type='signin' {...dataProps} />} />
+          <Route path='/signup' component={(props) => <Header {...props} type='signup' {...dataProps} />} />
           <Route path='/' component={(props) => <Header {...props} type='law' {...dataProps} />} />
+        </Switch>
+        <Switch>
+          <Route path='/signin' component={(props) => <SignIn {...props} {...dataProps} />} />
+          <Route path='/signup' component={(props) => <SignUp {...props} {...dataProps} />} />
         </Switch>
       </BrowserRouter>
     </MuiThemeProvider>
