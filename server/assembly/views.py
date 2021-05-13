@@ -11,7 +11,7 @@ from .models import Law, Lawmaker, Comments, LikeLaw
 from .serializers import LawSerializer, LawmakerSerializer
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets
-from django.db.models import F
+from django.db.models import F, Q
 from django.shortcuts import get_object_or_404
 
 
@@ -73,7 +73,7 @@ def like_law(request):
         law_id = data['law_id']
 
         try:
-            ll = LikeLaw.objects.get(user_id=user_id)
+            ll = LikeLaw.objects.get(Q(user_id=user_id) & Q(law_id=law_id))
         except LikeLaw.DoesNotExist:
             ll = None
 
@@ -89,6 +89,19 @@ def like_law(request):
         law.save()
 
         return JsonResponse({"success": True,"message": "click success"},status=200)
+
+@csrf_exempt
+def append_comment(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        user_id = data['username']
+        law_id = data['law_id']
+        content = data['content']
+        like_dislike = data['like_dislike']
+
+        Comments.objects.create(user_id=user_id, comment=content, like_dislike=like_dislike, law_id=law_id, comment_like=0)
+
+        return JsonResponse({"success": True, "message": "comment success"},status=200)
 
 @csrf_exempt
 def account_list(request):

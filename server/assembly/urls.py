@@ -18,4 +18,5 @@ urlpatterns += [
     path('auth', include('rest_framework.urls', namespace='rest_framework')),
     path('law_detail/<str:law_id>', law_detail),
     path('like_law', like_law),
+    path('append_comment', append_comment),
 ]
