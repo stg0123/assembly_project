@@ -35,7 +35,7 @@ function App(props) {
   const classes = useStyles();
   const [User, setUser] = useState({
     isLogin: true,
-    userID: 'test123'
+    userID: 'asdfasdfasdf'
   })
   const [Target, setTarget] = useState('테스트')
   const dataProps = {
@@ -60,7 +60,7 @@ function App(props) {
           <Route path='/signin' component={(props) => <SignIn {...props} {...dataProps} />} />
           <Route path='/signup' component={(props) => <SignUp {...props} {...dataProps} />} />
           <Route path='/search/:word' component={(props) => <LawSearch {...props} {...dataProps} />} />
-          <Route path='/content' component={(props) => <LawContent {...props} {...dataProps} />} />
+          <Route path='/content/:lawId' component={(props) => <LawContent {...props} {...dataProps} />} />
           <Route path="/" component={(props) => <Main {...props} {...dataProps} type='law' />} />
         </Switch>
       </BrowserRouter>

@@ -71,8 +71,12 @@ function LawSearchCard(props) {
         return `${parseInt((disagree / (agree + disagree)) * 100)}%`
     }
 
+    const lawClick=()=>{
+        props.history.push(`/content/${code}`)
+    }
+
     return (
-        <Card className={classes.root} onClick={() => { alert(code) }}>
+        <Card className={classes.root} onClick={lawClick}>
             <CardContent>
                 <Grid container>
                     <Grid style={{ width: getAgreePercent() }} className={[classes.barAgree, classes.bar]}>

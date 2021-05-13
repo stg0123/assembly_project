@@ -22,9 +22,9 @@ const Main = (props) => {
             {props.type === "law" &&
                 <>
                     <Typography variant="h4" color="secondary" className={classes.typo}>Top 3</Typography>
-                    <TopThreeList />
+                    <TopThreeList {...props}/>
                     <Typography variant="h4" color="secondary" className={classes.typo}>최신 법안들</Typography>
-                    <RecentLaw />
+                    <RecentLaw {...props}/>
                 </>
             }
         </>
