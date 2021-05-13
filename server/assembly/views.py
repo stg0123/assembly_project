@@ -9,7 +9,7 @@ from .models import Law
 from .serializers import LawSerializer
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets
-
+from django.db.models import F
 
 class LargeResultsSetPagination(PageNumberPagination):
     page_size = 10
@@ -20,6 +20,10 @@ class LawViewset(viewsets.ModelViewSet):
     queryset = Law.objects.all()
     serializer_class = LawSerializer
     pagination_class = LargeResultsSetPagination
+
+class Top3Viewset(viewsets.ModelViewSet):
+    queryset = Law.objects.annotate(like_sum=F('law_like')+F('law_dislike')).order_by('-like_sum')[:3]
+    serializer_class = LawSerializer
 
 
 @csrf_exempt
