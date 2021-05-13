@@ -108,8 +108,8 @@ class Comments(models.Model):
 
 class CommentsLike(models.Model):
     user_id = models.CharField(primary_key=True, max_length=255)
-    # comment_id = models.IntegerField(blank=True, null=True)
-    comment = models.ForeignKey(Comments, on_delete=models.PROTECT)
+    comment_id = models.IntegerField(blank=True, null=True)
+    # comment = models.ForeignKey(Comments, on_delete=models.PROTECT)
 
     class Meta:
         managed = False

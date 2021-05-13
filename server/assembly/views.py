@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate
 import datetime
 
 from rest_framework.parsers import JSONParser
-from .models import Law, Lawmaker,LawmakerRecord,LawmakerCareer, Comments, LikeLaw
+from .models import Law, Lawmaker,LawmakerRecord,LawmakerCareer, Comments, LikeLaw, CommentsLike
 from .serializers import LawSerializer, LawmakerSerializer
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets
@@ -102,6 +102,29 @@ def append_comment(request):
         Comments.objects.create(user_id=user_id, comment=content, like_dislike=like_dislike, law_id=law_id, comment_like=0)
 
         return JsonResponse({"success": True, "message": "comment success"},status=200)
+
+@csrf_exempt
+def like_comment(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        user_id = data['username']
+        law_id = data['law_id']
+        comment_id = data['comment_id']
+
+        try:
+            cl = CommentsLike.objects.get(Q(user_id=user_id) & Q(comment_id=comment_id))
+        except CommentsLike.DoesNotExist:
+            cl = None
+
+        if cl:
+            return JsonResponse({"success": False, "message": "already clicked"}, status=200)
+
+        CommentsLike.objects.create(user_id=user_id, comment_id=comment_id)
+        comment = Comments.objects.get(comment_id=comment_id)
+        comment.comment_like = comment.comment_like + 1
+        comment.save()
+
+        return JsonResponse({"success": True, "message": "like comment success"},status=200)
 
 @csrf_exempt
 def account_list(request):
