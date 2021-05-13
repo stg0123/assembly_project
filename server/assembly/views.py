@@ -4,6 +4,24 @@ from .models import AuthUser
 from .serializers import AccountSerializer
 from rest_framework.parsers import JSONParser
 
+from rest_framework.parsers import JSONParser
+from .models import Law
+from .serializers import LawSerializer
+from rest_framework.pagination import PageNumberPagination
+from rest_framework import viewsets
+
+
+class LargeResultsSetPagination(PageNumberPagination):
+    page_size = 10
+    page_query_param = 'page_size'
+    max_page_size = 100
+
+class LawViewset(viewsets.ModelViewSet):
+    queryset = Law.objects.all()
+    serializer_class = LawSerializer
+    pagination_class = LargeResultsSetPagination
+
+
 @csrf_exempt
 def account_list(request):
     if request.method == 'GET':
