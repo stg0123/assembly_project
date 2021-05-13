@@ -15,7 +15,7 @@
 
 ## 🖥 실행 화면
 
-(gif)
+<img src="./resources/hompage.gif"/>
 
 
 ## 🗂 시스템 구성도
