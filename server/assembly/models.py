@@ -91,3 +91,24 @@ class AuthUser(models.Model):
     class Meta:
         managed = False
         db_table = 'auth_user'
+
+class Comments(models.Model):
+    comment_id = models.AutoField(primary_key=True)
+    user_id = models.CharField(max_length=1000, blank=True, null=True)
+    comment = models.TextField(blank=True, null=True)
+    like_dislike = models.TextField(blank=True, null=True)
+    law_id = models.CharField(max_length=1000, blank=True, null=True)
+    comment_like = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'comments'
+
+
+class CommentsLike(models.Model):
+    user_id = models.CharField(primary_key=True, max_length=255)
+    comment_id = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'comments_like'
