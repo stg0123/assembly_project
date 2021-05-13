@@ -1,24 +1,39 @@
-import logo from './logo.svg';
+import { Route, BrowserRouter, Switch } from 'react-router-dom';
 import './App.css';
+import Header from './components/Header'
+import { makeStyles } from '@material-ui/core/styles';
+import { useState } from 'react'
 
-function App() {
+
+
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  }
+}))
+
+function App(props) {
+  const classes = useStyles();
+  const [User, setUser] = useState({
+    isLogin: true,
+    userEmail: 'helloworld@test.com',
+    userName: '전세환'
+  })
+  const dataProps = {
+    user: User,
+    setUser: setUser
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Switch>
+        <Route path='/person' component={(props) => <Header {...props} type='person' {...dataProps} />} />
+        <Route path='/login' component={(props) => <Header {...props} type='login' {...dataProps} />} />
+        <Route path='/' component={(props) => <Header {...props} type='law' {...dataProps} />} />
+      </Switch>
+    </BrowserRouter>
+
+
   );
 }
 
