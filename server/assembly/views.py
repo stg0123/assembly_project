@@ -1,13 +1,13 @@
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import AuthUser
-from .serializers import AccountSerializer
+from .serializers import AccountSerializer ,LawmakerCarrerSerializer,LawmakerRecodeSerializer
 from rest_framework.parsers import JSONParser
 from django.contrib.auth import authenticate
 import datetime
 
 from rest_framework.parsers import JSONParser
-from .models import Law, Lawmaker
+from .models import Law, Lawmaker,LawmakerRecord,LawmakerCareer
 from .serializers import LawSerializer, LawmakerSerializer
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets
@@ -94,6 +94,24 @@ def account(request, pk):
     elif request.method == 'DELETE':
         obj.delete()
         return HttpResponse(status=204)
+
+@csrf_exempt
+def person_detail(request,name):
+    if request.method == 'GET':
+        data1 = LawmakerCareer.objects.filter(lawmaker_name=name)
+        data2 = LawmakerRecodeSerializer(LawmakerRecord.objects.filter(lawmaker_name=name)[0])
+        result ={}
+        result[0]=data2.data
+        n=1
+        for d in data1:
+            result[n] = LawmakerCarrerSerializer(d).data
+            n+=1
+    return JsonResponse(result, safe=False, json_dumps_params={'ensure_ascii': False})
+        
+
+        
+    
+
 
 
 @csrf_exempt

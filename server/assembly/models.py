@@ -46,7 +46,7 @@ class Lawmaker(models.Model):
 class LawmakerCareer(models.Model):
     lawmaker_name = models.TextField(blank=True, null=True)
     career_date = models.TextField(blank=True, null=True)
-    lawmaker_career = models.TextField(blank=True, null=True)
+    career = models.TextField(blank=True, null=True)
     lawmaker_th = models.TextField(blank=True, null=True)
 
     class Meta:
@@ -58,7 +58,7 @@ class LawmakerRecord(models.Model):
     lawmaker_name = models.TextField(blank=True, null=True)
     lawmaker_th = models.TextField(blank=True, null=True)
     record_date = models.TextField(blank=True, null=True)
-    lawmaker_record = models.TextField(blank=True, null=True)
+    record = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False

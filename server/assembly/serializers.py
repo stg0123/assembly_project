@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import AuthUser
+from .models import AuthUser, LawmakerCareer, LawmakerRecord
 from .models import Law, Lawmaker
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -46,4 +46,24 @@ class LawmakerSerializer(serializers.ModelSerializer):
             'email',
             'homepage',
             'picture',
+        ]
+
+class LawmakerCarrerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LawmakerCareer
+        fields = [
+            'lawmaker_name',
+            'career_date',
+            'career',
+            'lawmaker_th'
+        ]
+
+class LawmakerRecodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LawmakerRecord
+        fields = [
+            'lawmaker_name',
+            'lawmaker_th',
+            'record_date',
+            'record'
         ]

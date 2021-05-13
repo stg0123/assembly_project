@@ -15,5 +15,6 @@ urlpatterns += [
     path('accounts', account_list),
     path('accounts/<int:pk>', account),
     path('login', login),
+    path('person/<str:name>',person_detail),
     path('auth', include('rest_framework.urls', namespace='rest_framework'))
 ]
