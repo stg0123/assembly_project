@@ -7,11 +7,13 @@ from django.contrib.auth import authenticate
 import datetime
 
 from rest_framework.parsers import JSONParser
-from .models import Law, Lawmaker,LawmakerRecord,LawmakerCareer
+from .models import Law, Lawmaker,LawmakerRecord,LawmakerCareer, Comments, LikeLaw
 from .serializers import LawSerializer, LawmakerSerializer
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets
 from django.db.models import F
+from django.shortcuts import get_object_or_404
+
 
 class LargeResultsSetPagination(PageNumberPagination):
     page_size = 10
@@ -23,6 +25,7 @@ class LawViewset(viewsets.ModelViewSet):
     serializer_class = LawSerializer
     pagination_class = LargeResultsSetPagination
 
+    # ?search=키워드
     def get_queryset(self):
         qs = super().get_queryset()
         search = self.request.GET.get('search', '')
@@ -46,6 +49,46 @@ class Top3Viewset(viewsets.ModelViewSet):
     queryset = Law.objects.annotate(like_sum=F('law_like')+F('law_dislike')).order_by('-like_sum')[:3]
     serializer_class = LawSerializer
 
+
+@csrf_exempt
+def law_detail(request, law_id):
+    detail = list(Law.objects.filter(law_id=law_id).values())[0]
+    comments = sorted(list(Comments.objects.filter(law_id=law_id).values()), key=lambda c: -c['comment_like'])
+    like_comments = [comment for comment in comments if comment['like_dislike']=='찬성']
+    dislikes_comments = [comment for comment in comments if comment['like_dislike']=='반대']
+
+    return JsonResponse({
+        'detail': detail,
+        'like_comments': like_comments,
+        'dislikes_comments': dislikes_comments,
+    }, safe=False, json_dumps_params={'ensure_ascii': False})
+
+
+@csrf_exempt
+def like_law(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        user_id = data['username']
+        like_dislike = data['like_dislike']
+        law_id = data['law_id']
+
+        try:
+            ll = LikeLaw.objects.get(user_id=user_id)
+        except LikeLaw.DoesNotExist:
+            ll = None
+
+        if ll:
+            return JsonResponse({"success": False, "message": "already clicked"}, status=200)
+
+        LikeLaw.objects.create(user_id=user_id, law_id=law_id, like_dislike=like_dislike)
+        law = Law.objects.get(law_id=law_id)
+        if like_dislike == 'like':
+            law.law_like = law.law_like + 1
+        else:
+            law.law_dislike = law.law_dislike + 1
+        law.save()
+
+        return JsonResponse({"success": True,"message": "click success"},status=200)
 
 @csrf_exempt
 def account_list(request):

@@ -16,5 +16,7 @@ urlpatterns += [
     path('accounts/<int:pk>', account),
     path('login', login),
     path('person/<str:name>',person_detail),
-    path('auth', include('rest_framework.urls', namespace='rest_framework'))
+    path('auth', include('rest_framework.urls', namespace='rest_framework')),
+    path('law_detail/<str:law_id>', law_detail),
+    path('like_law', like_law),
 ]

@@ -97,7 +97,7 @@ function LawSearch(props) {
         <Grid container justify='center'>
             <SearchBar type={'lawInside'} {...props} {...{setPage,setList,word}} />
             <Grid container className={classes.grid} alignItems='center' justify='center'>
-                <Typography className={classes.result} variant='h4'>{word}에 대한 검색 결과입니다.</Typography>
+                <Typography className={classes.result} variant='h4'><b>{word}</b>에 대한 검색 결과입니다.</Typography>
             </Grid>
             <Grid container className={classes.grid} alignItems='flex-start' justify='center'>
                 {List.map((info) => {
