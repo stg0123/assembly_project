@@ -28,12 +28,13 @@ const SearchBar = (props) => {
         setInput(e.target.value);
     }
     const onSubmit = () => {
-        if(input.length==0){
+        if (input.length == 0) {
             alert('검색어가 없습니다.')
             return
         }
         props.setTarget(input)
-        if (type=='law') props.history.push('/search')
+        if (type == 'law') props.history.push('/search')
+        else if (type === 'person') props.history.push('/person/search');
     }
     const handleKeyDown = (e) => {
         if (e.key === "Enter") {

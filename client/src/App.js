@@ -9,6 +9,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useState } from 'react'
 import Main from './components/Main';
 import LawSearch from './components/LawSearch';
+import PersonSearch from './components/PersonSearch';
 
 const theme = createMuiTheme({
   palette: {
@@ -56,6 +57,7 @@ function App(props) {
           <Route path='/' component={(props) => <Header {...props} type='law' {...dataProps} />} />
         </Switch>
         <Switch>
+          <Route path="/person/search" component={(props) => <PersonSearch {...props} {...dataProps} type='person' />} />
           <Route path="/person" component={(props) => <Main {...props} {...dataProps} type='person' />} />
           <Route path='/signin' component={(props) => <SignIn {...props} {...dataProps} />} />
           <Route path='/signup' component={(props) => <SignUp {...props} {...dataProps} />} />
