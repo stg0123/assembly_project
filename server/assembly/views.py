@@ -54,8 +54,8 @@ class Top3Viewset(viewsets.ModelViewSet):
 def law_detail(request, law_id):
     detail = list(Law.objects.filter(law_id=law_id).values())[0]
     comments = sorted(list(Comments.objects.filter(law_id=law_id).values()), key=lambda c: -c['comment_like'])
-    like_comments = [comment for comment in comments if comment['like_dislike']=='찬성']
-    dislikes_comments = [comment for comment in comments if comment['like_dislike']=='반대']
+    like_comments = [comment for comment in comments if comment['like_dislike']=='like']
+    dislikes_comments = [comment for comment in comments if comment['like_dislike']=='dislike']
 
     return JsonResponse({
         'detail': detail,
@@ -107,6 +107,7 @@ def append_comment(request):
 def like_comment(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
+        print(data)
         user_id = data['username']
         # law_id = data['law_id']
         comment_id = data['comment_id']
@@ -120,7 +121,7 @@ def like_comment(request):
             return JsonResponse({"success": False, "message": "already clicked"}, status=200)
 
         CommentsLike.objects.create(user_id=user_id, comment_id=comment_id)
-        comment = Comments.objects.get(comment_id=comment_id)
+        comment = Comments.objects.get(id=comment_id)
         comment.comment_like = comment.comment_like + 1
         comment.save()
 
