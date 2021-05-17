@@ -4,7 +4,7 @@
 
 <br>  
 
-프로젝트 url : https://www.google.com/url?q=https://assembly-project-gg.run.goorm.io/&sa=D&source=editors&ust=1620965608469000&usg=AFQjCNFhNYpsO2qCiUjejIBfZ3d3c5InvA
+프로젝트 url :https://assembly-project-gg.run.goorm.io/
 
 
 ## 📄 개요  
