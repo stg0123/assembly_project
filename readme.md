@@ -4,7 +4,7 @@
 
 <br>  
 
-프로젝트 url :https://assembly-project-gg.run.goorm.io/
+프로젝트 url :https://assembly-project-gg.run.goorm.io/  (현재 닫혀있음)
 
 
 ## 📄 개요  
