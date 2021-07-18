@@ -6,9 +6,9 @@ from .views import LawViewset, Top3Viewset, LawmakerViewset
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register(r'laws', LawViewset, basename='laws')
-router.register(r'top3', Top3Viewset, basename='top3')
-router.register(r'lawmakers', LawmakerViewset, basename='lawmakers')
+router.register('laws', LawViewset, basename='laws')
+router.register('top3', Top3Viewset, basename='top3')
+router.register('lawmakers', LawmakerViewset, basename='lawmakers')
 urlpatterns = router.urls
 
 urlpatterns += [
