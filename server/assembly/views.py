@@ -6,7 +6,6 @@ from rest_framework.parsers import JSONParser
 from django.contrib.auth import authenticate
 import datetime
 
-from rest_framework.parsers import JSONParser
 from .models import Law, Lawmaker,LawmakerRecord,LawmakerCareer, Comments, LikeLaw, CommentsLike
 from .serializers import LawSerializer, LawmakerSerializer
 from rest_framework.pagination import PageNumberPagination
